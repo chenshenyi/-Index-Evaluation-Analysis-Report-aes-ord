@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
  
 HERE = pathlib.Path(__file__).parent.resolve()
  
-PACKAGE_NAME = "index_evaluation_analysis_report"
+PACKAGE_NAME = "aes_tool"
 AUTHOR = "Chen Shen Yi"
 AUTHOR_EMAIL = "123dtw@gmail.com"
 URL = "https://github.com/chenshenyi/Index-Evaluation-Analysis-Report"
