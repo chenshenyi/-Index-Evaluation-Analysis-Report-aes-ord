@@ -1,11 +1,15 @@
+' This code has following functions:
+' 1. paste clipboard to placehold
+' 2. paste clipboard to content control
+' 3. create content control
+
+
 Function paste_clipboard_to_placehold(wdDoc As Object, placehold As String)
 
 Dim wdRng As Object
 
 Set wdRng = wdDoc.Range
-
 wdRng.Find.Execute FindText:=placehold, ReplaceWith:="", Replace:=wdReplaceAll
-
 wdRng.Paste
 
 End Function
@@ -13,9 +17,7 @@ End Function
 Function paste_clipboard_to_contentcontrol(wdDoc As Object, cc As Object)
 
 Dim wdRng As Object
-
 Set wdRng = cc.Range
-
 wdRng.Paste
 
 End Function
@@ -23,17 +25,11 @@ End Function
 Function create_content_control(wdDoc As Object, placehold As String)
 
 Dim wdRng As Object
-
 Set wdRng = wdDoc.Range
-
 wdRng.Find.Execute FindText:=placehold, ReplaceWith:="", Replace:=wdReplaceAll
-
 wdRng.Select
-
 wdDoc.ContentControls.Add wdContentControlText, wdRng
-
 wdRng.ContentControls(1).Range.Text = placehold
-
 wdRng.ContentControls(1).Title = placehold
 
 End Function

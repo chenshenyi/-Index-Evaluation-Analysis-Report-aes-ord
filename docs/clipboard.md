@@ -1,4 +1,4 @@
-# clipboard-paste.cls
+# clipboard.cls
 
 ## paste_clipboard_to_placehold
 
