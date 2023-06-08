@@ -34,7 +34,6 @@ Function create_content_control(wdDoc As Object, placehold As String)
 
 End Function
 
-
 Sub paste_clipboard_to_placehold_test()
 
     Dim wdApp As Object
