@@ -27,6 +27,46 @@ Function merge_worksheet_in_multiple_workbooks(workbook_path_list As Variant, _
     Next i
 End Function
 
+Function reformulate_worksheets(wb As Workbook, _
+                                ws_name As String, _
+                                avg_or_sum As String)
+    Dim ws As Worksheet
+    Dim last_row As Long
+    
+    Set ws = wb.Worksheets(ws_name)
+    last_row = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    
+    ' Re-formulate every cell in column C to column F
+    ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "sum"
+    ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "avg" 
+    
+    
+    For i = 3 To 6
+        For j = 2 To last_row
+            ' Test if " /" exists in the cell
+            If InStr(ws.Cells(j, i).Value, " /") = 0 Then
+                ' Change the cell to the number format
+                ' If the cell is empty then do nothing
+                ' If the cell is a numeric string then convert it to a number
+                ' e.g. "123" -> 123, "123.45" -> 123.45, "23.02%" -> 23.02%
+
+                If ws.Cells(j, i).Value <> "" Then
+                    ws.Cells(j, i).Value = ws.Cells(j, i).Value
+                End If
+            
+                GoTo next_j
+            End If
+
+            If avg_or_sum = "sum" Then
+                ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(0)
+            ElseIf avg_or_sum = "avg" Then
+                ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(1)
+            End If
+next_j:
+        Next j
+    Next i
+
+End Function
 
 Sub test_merge_worksheet_in_multiple_workbooks()
     Dim workbook_path_list As Variant
@@ -50,3 +90,9 @@ Sub test_merge_worksheet_in_multiple_workbooks()
     Application.DisplayAlerts = True
 End Sub
 
+Sub test_reformulate_worksheets()
+    Dim wb As Workbook
+
+    Set wb = Workbooks.Open(ThisWorkbook.path & "\origin-data-rearrangement.xlsx")
+    Call reformulate_worksheets(wb, "近三年比較", "sum")
+End Sub

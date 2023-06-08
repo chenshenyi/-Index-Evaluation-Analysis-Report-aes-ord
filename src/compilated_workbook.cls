@@ -9,7 +9,7 @@ Function create_workbooks_by_college_names(college_name_list As Variant, target_
     For Each college_name In college_name_list
         output_workbook_name = target_folder & college_name & ".xlsx"
         
-        ' If the output workbook already exists, then go to the next college name
+        ' If the output wb already exists, then go to the next college name
         If Dir(output_workbook_name) <> "" Then
             GoTo NextCollegeName
         End If
@@ -26,41 +26,41 @@ Function initialize_worksheets(workbook_names As Variant, worksheet_names As Var
 
     Dim workbook_name As Variant
     Dim worksheet_name As Variant
-    Dim workbook As Workbook
-    Dim worksheet As Worksheet
+    Dim wb As Workbook
+    Dim sht As Worksheet
     
     For Each workbook_name In workbook_names
-        Set workbook = Workbooks.Open(ThisWorkbook.path & "/" & workbook_name)
+        Set wb = Workbooks.Open(ThisWorkbook.path & "/" & workbook_name)
         
         For Each worksheet_name In worksheet_names
-            ' Test if the worksheet exists
-            ' If the worksheet exists, then delete
-            If worksheet_exists(workbook, worksheet_name) Then
-                workbook.Worksheets(worksheet_name).Delete
+            ' Test if the sht exists
+            ' If the sht exists, then delete
+            If worksheet_exists(wb, worksheet_name) Then
+                wb.Worksheets(worksheet_name).Delete
             End If
 
-            ' Copy the template worksheet
-            worksheet_template.Copy After:=workbook.Worksheets(workbook.Worksheets.Count)
-            Set worksheet = workbook.Worksheets(workbook.Worksheets.Count)
-            worksheet.Name = worksheet_name
+            ' Copy the template sht
+            worksheet_template.Copy After:=wb.Worksheets(wb.Worksheets.Count)
+            Set sht = wb.Worksheets(wb.Worksheets.Count)
+            sht.Name = worksheet_name
         Next worksheet_name
         
-        workbook.Save
-        workbook.Close
+        wb.Save
+        wb.Close
     Next workbook_name
 End Function
 
-Function worksheet_exists(workbook As Workbook, worksheet_name As Variant) As Boolean
-    Dim worksheet As Worksheet
+Function worksheet_exists(wb As Workbook, worksheet_name As Variant) As Boolean
+    Dim sht As Worksheet
     
     worksheet_exists = False
     
-    For Each worksheet In workbook.Worksheets
-        If worksheet.Name = worksheet_name Then
+    For Each sht In wb.Worksheets
+        If sht.Name = worksheet_name Then
             worksheet_exists = True
             Exit Function
         End If
-    Next worksheet
+    Next sht
 End Function
 
 Sub test_create_workbooks_by_college_names()
@@ -70,6 +70,10 @@ Sub test_create_workbooks_by_college_names()
 
     Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "\")
 End Sub
+
+
+' ====================================================================================
+' Test Subs
 
 Sub test_initialize_worksheets()
 Application.DisplayAlerts = False
@@ -88,12 +92,12 @@ Application.DisplayAlerts = True
 End Sub
 
 Sub test_worksheet_exists()
-    Dim workbook As Workbook
-    Dim worksheet As Worksheet
+    Dim wb As Workbook
+    Dim sht As Worksheet
     
-    Set workbook = Workbooks.Open(ThisWorkbook.path & "/College1.xlsx")
-    Set worksheet = workbook.Worksheets("Sheet1")
+    Set wb = Workbooks.Open(ThisWorkbook.path & "/College1.xlsx")
+    Set sht = wb.Worksheets("Sheet1")
     
-    MsgBox worksheet_exists(workbook, "Sheet1")
-    MsgBox worksheet_exists(workbook, "Sheet2")
+    MsgBox worksheet_exists(wb, "Sheet1")
+    MsgBox worksheet_exists(wb, "Sheet2")
 End Sub
