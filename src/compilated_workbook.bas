@@ -1,7 +1,8 @@
-' This code has following functions:
-' 1. Create workbooks by college names
-
-' 
+' * Create workbooks by college names
+' The workbooks will be created in the target folder
+' Parameter:
+'   college_name_list: the list of college names
+'   target_folder: the folder to store the workbooks
 Function create_workbooks_by_college_names(college_name_list As Variant, target_folder As String)
 
     Dim output_workbook As Workbook
@@ -31,6 +32,31 @@ Sub test_create_workbooks_by_college_names()
     Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "\")
 End Sub
 
+Function initialize_workbooks(college_name_list As Variant, evaluation_item_list As Variant)
+    Dim wb As Workbook
+    Dim sht As Worksheet
+
+    Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "/1. 各院彙整資料/")
+
+    For Each college_name In college_name_list
+        Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx")
+        
+        For Each evaluation_item In evaluation_item_list
+
+        Next evaluation_item
+        
+        wb.Save
+        wb.Close
+    Next college_name
+End Function
+
+
+' * Initialize worksheets by Worksheet Template
+' The worksheets will be created in the target workbook
+' Parameter:
+'   wb: the target workbook
+'   worksheet_name: the name of the worksheet to be created
+'   worksheet_template: the template worksheet
 Function initialize_worksheet(wb As Workbook, worksheet_name As Variant, worksheet_template As Worksheet)
 
     Dim sht As Worksheet
@@ -70,6 +96,10 @@ Application.DisplayAlerts = False
 Application.DisplayAlerts = True
 End Sub
 
+' * Test if the worksheet exists in the workbook
+' Parameter:
+'   wb: the target workbook
+'   worksheet_name: the name of the worksheet to be tested
 Function worksheet_exists(wb As Workbook, worksheet_name As Variant) As Boolean
     Dim sht As Worksheet
     
@@ -94,26 +124,10 @@ Sub test_worksheet_exists()
     MsgBox worksheet_exists(wb, "Sheet2")
 End Sub
 
-Function initialize_workbooks(college_name_list As Variant, evaluation_item_list As Variant)
-    Dim wb As Workbook
-    Dim sht As Worksheet
-
-    Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "/1. 各院彙整資料/")
-
-    For Each college_name In college_name_list
-        Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx")
-        
-        For Each evaluation_item In evaluation_item_list
-
-        Next evaluation_item
-        
-        wb.Save
-        wb.Close
-    Next college_name
-End Function
-
 ' * Get the year of this report
 ' The data is stored in the worksheet "原始資料參數"!B2 in "B 參數.xlsx"
+' Parameter:
+'   wb: the workbook containing the worksheet "原始資料參數"
 Function get_year(wb as Workbook) As Integer
     Dim year As Integer
     
@@ -124,6 +138,8 @@ End Function
 
 ' * Get the number of evaluation items
 ' The data is stored in the worksheet "原始資料參數"!B1 in "B 參數.xlsx"
+' Parameter:
+'   wb: the workbook containing the worksheet "原始資料參數"
 Function get_number_of_evaluation_items(wb as Workbook)
     Dim number_of_evaluation_items As Integer
     
@@ -298,7 +314,7 @@ End Sub
 
 ' * Create a dictionary of evaluation items
 ' The format of the dictionary is as follows:
-' {"name":{"id":id, "format":"百分比" | "整數數值" | "數值", "sort": "遞增" | "遞減", "summarize": "均值" | "加總"}}
+' {"name":{"id":id, "format":"整數數值" | "數值" | "百分比", "sort": "遞增" | "遞減", "summarize": "均值" | "加總"}}
 ' The data is stored in the worksheet "評鑑指標" in "B 參數.xlsx"
 ' First row is the header
 ' Column A: Evaluation item id
