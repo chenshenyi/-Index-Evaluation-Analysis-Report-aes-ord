@@ -1,5 +1,12 @@
 # Index-Evaluation-Analysis-Report
 
-## [æ–°å°ˆæ¡ˆä¸‹è¼‰](https://downgit.github.io/#/home?url=https://github.com/chenshenyi/Index-Evaluation-Analysis-Report/tree/vbs-project/%E6%8C%87%E6%A8%99%E5%A0%B1%E5%91%8A%E6%9B%B8%E8%87%AA%E5%8B%95%E5%8C%96%E7%A8%8B%E5%BC%8F)
+## ÀÉ®×¤U¸ü
+- [ªÅ¥Õ±M®×¤U¸ü](https://downgit.github.io/#/home?url=https://github.com/chenshenyi/Index-Evaluation-Analysis-Report/tree/vbs-project/%E6%8C%87%E6%A8%99%E5%A0%B1%E5%91%8A%E6%9B%B8%E8%87%AA%E5%8B%95%E5%8C%96%E7%A8%8B%E5%BC%8F)
+*ª`·N¡G¦¹³sµ²¥i¯à¥X²{Äµ§i¡A¦ý¥i¥H©ñ¤ßÄ~Äò¤U¸ü*
+- [¤U¸ü§ó·sÀÉ]()
+¶i¦æ¤¤ªº±M®×¡A½Ð¤U¸ü§ó·sÀÉ¡A¨Ã±NÀÉ®×ÂÐ»\¦Ü­ì±M®×¤¤`A ¥Dµ{¦¡.xlsm`ÀÉ®×
 
-> ç¨‹å¼ç¢¼ä¸­æœ‰ä¸­æ–‡ï¼Œè«‹çµ±ä¸€ä½¿ç”¨ Big5 ç·¨ç¢¼ï¼Œå¦å‰‡åŒ¯å…¥ Excel æ™‚æœƒå‡ºç¾äº‚ç¢¼
+## ±M®×»¡©ú
+¥»±M®×¦³¨â­Ó¥D­n¥\¯à¡G
+1. ·J¾ã­ì©l¸ê®Æ¨Ã¥Í¦¨¹Ïªí
+2. ±N¶×¤J«ü¼Ð³ø§i®Ñ

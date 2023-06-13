@@ -1,35 +1,64 @@
+' coding: utf-8
+' compilate_workbooks.cls
+
 Sub initialize_workbooks()
     Dim argument_wb As Workbook
     Dim college_department_dict As Scripting.Dictionary
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim wb As Workbook
     Dim sht As Worksheet
+    Dim year As Integer
     
     ' Create the dictionary of college and evaluation item by "B 參數.xlsx"
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
     Set college_department_dict = create_college_department_dict(argument_wb)
     Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
-    argument_wb.Close
-
     year = get_year(argument_wb)
+    argument_wb.Close
 
     ' Create the workbooks by college names
     Call create_workbooks_by_college_names(college_department_dict.keys, ThisWorkbook.path & "/1. 各院彙整資料/")
 
+    ' Set loop limit
+    loop_count1 = 3
+    loop_count2 = 3
     For Each college In college_department_dict.keys
         Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college & ".xlsx")
         
         ' Initialize the worksheets by evaluation items
         For Each evaluation_item In evaluation_item_dict.keys
+
             worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
             Call initialize_worksheet(wb, worksheet_name, thisworkbook.worksheets("template"))
 
+            ' Insert new rows by the number of departments
+            Call insert_new_rows(wb, worksheet_name, college_department_dict(college).keys.count)
+
+            ' Add the rank equation
+            If evaluation_item_dict(evaluation_item)("sort") = "遞增" Then
+                Call add_rank_eq_formula(wb, worksheet_name, True)
+            Else
+                Call add_rank_eq_formula(wb, worksheet_name, False)
+            End If
+
+            ' Set the number format
+            Call set_number_format(wb, worksheet_name, evaluation_item_dict(evaluation_item)("format"))
+
+            loop_count2 = loop_count2 - 1
+            If loop_count2 = 0 Then
+                Exit For
+            End If
         Next evaluation_item
         
         wb.Save
         wb.Close
-    Next college_name
-End Function
+
+        loop_count1 = loop_count1 - 1
+        If loop_count1 = 0 Then
+            Exit For
+        End If
+    Next college
+End Sub
 
 ' * Create workbooks by college names
 ' The workbooks will be created in the target folder
