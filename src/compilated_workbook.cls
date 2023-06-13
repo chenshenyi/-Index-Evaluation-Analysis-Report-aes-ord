@@ -1,3 +1,36 @@
+Sub initialize_workbooks()
+    Dim argument_wb As Workbook
+    Dim college_department_dict As Scripting.Dictionary
+    Dim evaluation_item_dict As Scripting.Dictionary
+    Dim wb As Workbook
+    Dim sht As Worksheet
+    
+    ' Create the dictionary of college and evaluation item by "B 參數.xlsx"
+    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
+    Set college_department_dict = create_college_department_dict(argument_wb)
+    Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
+    argument_wb.Close
+
+    year = get_year(argument_wb)
+
+    ' Create the workbooks by college names
+    Call create_workbooks_by_college_names(college_department_dict.keys, ThisWorkbook.path & "/1. 各院彙整資料/")
+
+    For Each college In college_department_dict.keys
+        Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college & ".xlsx")
+        
+        ' Initialize the worksheets by evaluation items
+        For Each evaluation_item In evaluation_item_dict.keys
+            worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
+            Call initialize_worksheet(wb, worksheet_name, thisworkbook.worksheets("template"))
+
+        Next evaluation_item
+        
+        wb.Save
+        wb.Close
+    Next college_name
+End Function
+
 ' * Create workbooks by college names
 ' The workbooks will be created in the target folder
 ' Parameter:
@@ -31,25 +64,6 @@ Sub test_create_workbooks_by_college_names()
 
     Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "\")
 End Sub
-
-Function initialize_workbooks(college_name_list As Variant, evaluation_item_list As Variant)
-    Dim wb As Workbook
-    Dim sht As Worksheet
-
-    Call create_workbooks_by_college_names(college_name_list, ThisWorkbook.path & "/1. 各院彙整資料/")
-
-    For Each college_name In college_name_list
-        Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx")
-        
-        For Each evaluation_item In evaluation_item_list
-
-        Next evaluation_item
-        
-        wb.Save
-        wb.Close
-    Next college_name
-End Function
-
 
 ' * Initialize worksheets by Worksheet Template
 ' The worksheets will be created in the target workbook
@@ -242,6 +256,7 @@ End Sub
 
 ' TODO: Add a function to write the department names to the each worksheet
 
+
 ' TODO: Add a function to write the summary worksheet
 
 
@@ -314,7 +329,7 @@ End Sub
 
 ' * Create a dictionary of evaluation items
 ' The format of the dictionary is as follows:
-' {"name":{"id":id, "format":"整數數值" | "數值" | "百分比", "sort": "遞增" | "遞減", "summarize": "均值" | "加總"}}
+' {name:{"id":id, "format":"整數數值" | "數值" | "百分比", "sort": "遞增" | "遞減", "summarize": "均值" | "加總"}}
 ' The data is stored in the worksheet "評鑑指標" in "B 參數.xlsx"
 ' First row is the header
 ' Column A: Evaluation item id
@@ -322,7 +337,7 @@ End Sub
 ' Column C: Evaluation item format
 ' Column D: Evaluation item sort
 ' Column E: Evaluation item summarize
-Function create_evaluation_item_dict(wb As Workbook)
+Function create_evaluation_item_dict(wb As Workbook) As Scripting.Dictionary
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim evaluation_item_id As Variant
     Dim evaluation_item_name As Variant
