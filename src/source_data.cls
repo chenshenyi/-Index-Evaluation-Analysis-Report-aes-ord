@@ -37,8 +37,9 @@ Function reformulate_worksheets(wb As Workbook, _
     last_row = ws.Cells(ws.Rows.Count, 2).End(xlUp).Row
     
     ' Re-formulate the cells in Column C to N
+    ' * The range of the cells should according to the source data
     For i = 3 To 14
-        For j = 9 To last_row
+        For j = 9 To last_row ' 9 is the first row of the data
             ' Test if " /" exists in the cell
             If InStr(ws.Cells(j, i).Value, " /") = 0 Then
                 ' Change the cell to the number format
@@ -52,12 +53,12 @@ Function reformulate_worksheets(wb As Workbook, _
             End If
 
             ' Re-formulate the cell with two datas
-            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "sum"
-            ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "avg" 
+            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "加總"
+            ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "均值" 
 
-            If avg_or_sum = "sum" Then
+            If avg_or_sum = "加總" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(0)
-            ElseIf avg_or_sum = "avg" Then
+            ElseIf avg_or_sum = "均值" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(1)
             End If
 next_j:
@@ -70,5 +71,5 @@ Sub test_reformulate_worksheets()
     Dim wb As Workbook
 
     Set wb = Workbooks.Open(ThisWorkbook.path & "\origin-data-rearrangement.xlsx")
-    Call reformulate_worksheets(wb, "近三年比較", "sum")
+    Call reformulate_worksheets(wb, "近三年比較", "加總")
 End Sub
