@@ -30,8 +30,9 @@ Sub initialize_all_workbooks()
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
     Set college_department_dict = create_college_department_dict(argument_wb)
     Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
-    year = get_year()
     argument_wb.Close
+    
+    year = get_year()
 
     ' Initialize the template worksheet
     ThisWorkbook.worksheets("template").Range("D1").Value = year & ""
@@ -265,11 +266,11 @@ Function set_number_format(wb As Workbook, worksheet_name As Variant, number_for
    
     Select Case number_format
         Case "俱计计"
-            rng.NumberFormat = "#,##0;-#,##0;"""""
+            rng.NumberFormat = "#,##0;"""";"""""
         Case "计"
-            rng.NumberFormat = "#,##0.00;-#,##0.00;"""""
+            rng.NumberFormat = "#,##0.00;"""";"""""
         Case "κだゑ"
-            rng.NumberFormat = "0.00%;-0.00%;"""""
+            rng.NumberFormat = "0.00%;"""";"""""
     End Select
 End Function
 

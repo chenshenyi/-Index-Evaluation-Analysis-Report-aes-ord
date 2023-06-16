@@ -1,9 +1,9 @@
 ' filename: college_department_dictionary
 
-' * Create a dictionary to store the department names by college names
 ' college_department_dict
 '   key: college name
-'   value: [{id, name, abbr}] (list of department dictionary)
+'   value: [department]
+'       department: {id, name, abbr}
 
 ' The data is stored in the worksheet "科系列表" in "B 參數.xlsx"
 '   First row is the header

@@ -1,6 +1,5 @@
 ' filename: evaluation_item_dictionary
 
-' * Create a dictionary of evaluation items
 ' The format of the dictionary is as follows:
 ' evaluation_item_dict
 '   key: evaluation item name

@@ -32,8 +32,5 @@ Function import_data(college_list As Variant, evaluation_item_list As Variant)
     Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
     argument_wb.Close
 
-    ' TODO:
 End Function
-
-
 
