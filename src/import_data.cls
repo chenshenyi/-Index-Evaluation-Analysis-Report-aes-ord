@@ -1,3 +1,17 @@
+' filename: import_data.cls
+
+' This module use the following dictionary:
+' college_department_dict
+'   key: college name
+'   value: [{id, name, abbr}] (list of department dictionary)
+' evaluation_item_dict
+'   key: evaluation item name
+'   value: {id, format, sort, summarize}
+'       id: String
+'       format: "整數數值" | "數值" | "百分比"
+'       sort: "遞增" | "遞減"
+'       summarize: "均值" | "加總"
+
 Function import_data(college_list As Variant, evaluation_item_list As Variant)
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
@@ -20,3 +34,6 @@ Function import_data(college_list As Variant, evaluation_item_list As Variant)
 
     ' TODO:
 End Function
+
+
+
