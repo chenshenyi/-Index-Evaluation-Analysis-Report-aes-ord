@@ -1,8 +1,5 @@
-' This code has following functions:
-' 1. paste clipboard to placehold
-' 2. paste clipboard to content control
-' 3. create content control
-
+' coding: utf-8
+' spaces: 4
 
 Function paste_clipboard_to_placehold(wdDoc As Object, placehold As String)
 
@@ -48,7 +45,7 @@ Sub paste_clipboard_to_placehold_test()
 
 End Sub
 
-Sub paste_clipboard_to_contentcontrol_test()
+Private Sub paste_clipboard_to_contentcontrol_test()
 
     Dim wdApp As Object
     Dim wdDoc As Object
@@ -67,7 +64,7 @@ Sub paste_clipboard_to_contentcontrol_test()
 
 End Sub
 
-Sub create_content_control_test()
+Private Sub test_create_content_control()
 
     Dim wdApp As Object
     Dim wdDoc As Object

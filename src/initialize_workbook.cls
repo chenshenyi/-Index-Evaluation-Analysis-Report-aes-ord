@@ -1,5 +1,5 @@
 ' coding: utf-8
-' compilate_workbooks.cls
+' spaces: 4
 
 Sub initialize_all_workbooks()
     Application.DisplayAlerts = False
@@ -18,7 +18,7 @@ Sub initialize_all_workbooks()
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
     Set college_department_dict = create_college_department_dict(argument_wb)
     Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
-    year = get_year(argument_wb)
+    year = get_year()
     argument_wb.Close
 
     ' Initialize the template worksheet
@@ -109,7 +109,7 @@ Function create_college_department_dict(wb As Workbook) As Scripting.Dictionary
 
 End Function
 
-Sub test_create_college_department_dict()
+Private Sub test_create_college_department_dict()
     
     Dim college_department_dict As Scripting.Dictionary
     Dim college_name As Variant
@@ -173,7 +173,7 @@ Function create_evaluation_item_dict(wb As Workbook) As Scripting.Dictionary
     Set create_evaluation_item_dict = evaluation_item_dict
 End Function
 
-Sub test_create_evaluation_item_dict()
+Private Sub test_create_evaluation_item_dict()
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim evaluation_item_name As Variant
     Dim evaluation_item As Variant
@@ -191,7 +191,7 @@ End Sub
 ' * Create workbooks by college names
 ' The workbooks will be created in the target folder
 ' Parameter:
-'   college_name_list: the list of college names
+' `  college_name_list: the list of college names
 '   target_folder: the folder to store the workbooks
 Function create_workbooks_by_college_names(college_name_list As Variant, target_folder As String)
 
@@ -214,7 +214,7 @@ NextCollegeName:
     Next college_name
 End Function
 
-Sub test_create_workbooks_by_college_names()
+Private Sub test_create_workbooks_by_college_names()
     Dim college_name_list As Variant
     
     college_name_list = Array("College1", "College2", "College3")
@@ -245,7 +245,7 @@ Function initialize_worksheet(wb As Workbook, worksheet_name As Variant, workshe
 
 End Function
 
-Sub test_initialize_worksheets()
+Private Sub test_initialize_worksheets()
     Application.DisplayAlerts = False
 
     Dim workbook_names As Variant
@@ -284,7 +284,7 @@ Function worksheet_exists(wb As Workbook, worksheet_name As Variant) As Boolean
     Next sht
 End Function
 
-Sub test_worksheet_exists()
+Private Sub test_worksheet_exists()
     Dim wb As Workbook
     Dim sht As Worksheet
     
@@ -299,10 +299,10 @@ End Sub
 ' The data is stored in the worksheet "把计"!B1 in "B 把计.xlsx"
 ' Parameter:
 '   wb: the workbook containing the worksheet "把计"
-Function get_year(wb as Workbook) As Integer
+Function get_year() As Integer
     Dim year As Integer
     
-    year = wb.Worksheets("把计").Cells(1, 2).Value
+    year = ThisWorkbook.Worksheets("北").Cells(1, 2).Value
     
     get_year = year
 End Function
@@ -322,7 +322,7 @@ Function insert_new_rows(wb As Workbook, worksheet_name As String, number_of_dep
 
 End Function
 
-Sub test_insert_new_rows()
+Private Sub test_insert_new_rows()
     Dim wb As Workbook
     
     Set wb = ThisWorkbook
@@ -351,7 +351,7 @@ End Sub
 '     sht.Range("G3:G" & last_row).Formula = "=IF(C3="""","""",RANK.EQ(C3,$C$3:$C$" & last_row & ", " & ascending & "))"
 ' End Function
 
-' Sub test_add_rank_eq_formula()
+' Private Sub test_add_rank_eq_formula()
 '     Dim wb As Workbook
     
 '     Set wb = ThisWorkbook
@@ -387,7 +387,7 @@ Function set_number_format(wb As Workbook, worksheet_name As Variant, number_for
     End Select
 End Function
 
-Sub test_set_number_format()
+Private Sub test_set_number_format()
     Dim wb As Workbook
     
     Set wb = ThisWorkbook
@@ -438,7 +438,7 @@ NextDepartment:
     Next department
 End Function
 
-Sub test_write_department_names()
+Private Sub test_write_department_names()
 
     Dim argument_wb As Workbook
     Dim college_department_dict As Scripting.Dictionary
@@ -490,7 +490,7 @@ Function initialize_summary_worksheet(wb As workbook, college_list As Collection
     wb.Worksheets("挡").Cells.Font.Name = "夹发砰"
 End Function
 
-Sub test_initialize_summary_worksheet()
+Private Sub test_initialize_summary_worksheet()
     Dim argument_wb As Workbook
     Dim college_department_dict As Scripting.Dictionary
     Dim evaluation_item_dict As Scripting.Dictionary

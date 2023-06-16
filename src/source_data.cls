@@ -1,3 +1,6 @@
+' coding: utf-8
+' spaces: 4
+
 ' Function merge_worksheet_in_multiple_workbooks(workbook_path_list As Variant, _
 '                                                 worksheet_name As String, _
 '                                                 output_workbook As Workbook, _
@@ -53,12 +56,12 @@ Function reformulate_worksheets(wb As Workbook, _
             End If
 
             ' Re-formulate the cell with two datas
-            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "加總"
-            ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "均值" 
+            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "???�?"
+            ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "??????" 
 
-            If avg_or_sum = "加總" Then
+            If avg_or_sum = "???�?" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(0)
-            ElseIf avg_or_sum = "均值" Then
+            ElseIf avg_or_sum = "??????" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(1)
             End If
 next_j:
@@ -67,9 +70,9 @@ next_j:
 
 End Function
 
-Sub test_reformulate_worksheets()
+Private Sub test_reformulate_worksheets()
     Dim wb As Workbook
 
     Set wb = Workbooks.Open(ThisWorkbook.path & "\origin-data-rearrangement.xlsx")
-    Call reformulate_worksheets(wb, "近三年比較", "加總")
+    Call reformulate_worksheets(wb, "�?�?年�??�?", "???�?")
 End Sub
