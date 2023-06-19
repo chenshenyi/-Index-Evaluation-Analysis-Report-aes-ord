@@ -1,4 +1,4 @@
-' filename: initialize_workbook
+Attribute VB_Name = "initialize_workbook"
 
 ' This module use the following dictionary:
 ' college_department_dict
@@ -28,8 +28,8 @@ Sub initialize_all_workbooks()
     
     ' Create the dictionary of college and evaluation item by "B 把计.xlsx"
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = create_college_department_dict(argument_wb)
-    Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
+    Set college_department_dict = college_department_dict_init(argument_wb)
+    Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
     argument_wb.Close
     
     year = get_year()
@@ -332,7 +332,7 @@ Private Sub test_write_department_names()
     Dim department_list As Collection
     
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = create_college_department_dict(argument_wb)
+    Set college_department_dict = college_department_dict_init(argument_wb)
     argument_wb.Close
     
     Set department_list = college_department_dict("瞶厩皘") 
@@ -383,8 +383,8 @@ Private Sub test_initialize_summary_worksheet()
     Dim evaluation_item_dict As Scripting.Dictionary
     
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = create_college_department_dict(argument_wb)
-    Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
+    Set college_department_dict = college_department_dict_init(argument_wb)
+    Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
     argument_wb.Close
     
     Call initialize_summary_worksheet(ThisWorkbook, college_department_dict("瞶厩皘"), evaluation_item_dict)

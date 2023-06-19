@@ -1,6 +1,6 @@
 # 專案說明
 
-> 程式碼中有中文，請統一使用 Big5 編碼，否則匯入 Excel 時會出現亂碼
+> 程式碼中有中文，請統一使用 Big5-HKSCS 編碼，否則匯入 Excel 時會出現亂碼
 
 ## 推薦使用工具
 - [Visual Studio Code](https://code.visualstudio.com/)

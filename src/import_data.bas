@@ -1,16 +1,4 @@
-' filename: import_data.cls
-
-' This module use the following dictionary:
-' college_department_dict
-'   key: college name
-'   value: [{id, name, abbr}] (list of department dictionary)
-' evaluation_item_dict
-'   key: evaluation item name
-'   value: {id, format, sort, summarize}
-'       id: String
-'       format: "俱计计" | "计" | "κだゑ"
-'       sort: "患糤" | "患搭"
-'       summarize: "А" | "羆"
+Attribute VB_Name = "import_data"
 
 Function import_data(college_list As Variant, evaluation_item_list As Variant)
     Application.DisplayAlerts = False
@@ -28,8 +16,8 @@ Function import_data(college_list As Variant, evaluation_item_list As Variant)
     
     ' Create the dictionary of college and evaluation item by "B 把计.xlsx"
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = create_college_department_dict(argument_wb)
-    Set evaluation_item_dict = create_evaluation_item_dict(argument_wb)
+    Set college_department_dict = college_department_dict_init(argument_wb)
+    Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
     argument_wb.Close
 
 End Function

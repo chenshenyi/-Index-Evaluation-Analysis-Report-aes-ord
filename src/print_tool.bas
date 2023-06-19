@@ -1,4 +1,5 @@
-' filename: print_tool.cls
+Attribute VB_Name = "print_tool"
+
 ' This file print the content of a dictionary or a collection in json format
 
 Function json_str(iterable As Variant, Optional indent As Integer = 0)
@@ -8,7 +9,7 @@ Function json_str(iterable As Variant, Optional indent As Integer = 0)
         json_str = collection_json(iterable, indent)
     Else
         ' if iterable is not a dictionary or a collection, return the string representation of the iterable
-        json_str = """" & iterable & """"
+        json_str = iterable
     End If
 End Function
 
@@ -28,7 +29,7 @@ Function collection_json(clcn As Variant, indent As Integer)
     collection_json = Left(collection_json, Len(collection_json) - 1) & vbCrLf & Space(indent) & "]"
 End Function
 
-Private Sub test_iterable_to_json()
+Private Sub test_json_str()
     Dim dict As Scripting.Dictionary
     Set dict = New Scripting.Dictionary
     dict.Add "key1", "value1"

@@ -1,10 +1,10 @@
-' filename: evaluation_item_dictionary
+Attribute VB_Name = "evaluation_item_dictionary"
 ' TODO: Optimize the structure of the dictionary
 
 ' The format of the dictionary is as follows:
 ' evaluation_item_dict
 '   key: evaluation item name
-'   value: {id, format, sort, summarize}
+'   value: {id, format, sort, summarize, source}
 '       id: String
 '       format: "整數數值" | "數值" | "百分比"
 '       sort: "遞增" | "遞減"
@@ -18,7 +18,7 @@
 '   Column D: Evaluation item sort
 '   Column E: Evaluation item summarize
 
-Function create_evaluation_item_dict(wb As Workbook) As Scripting.Dictionary
+Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Dictionary
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim evaluation_item_id As Variant
     Dim evaluation_item_name As Variant
@@ -29,7 +29,7 @@ Function create_evaluation_item_dict(wb As Workbook) As Scripting.Dictionary
     Dim last_row As Long
     
     Set evaluation_item_dict = New Scripting.Dictionary
-    Set ws = wb.Worksheets("評鑑指標")
+    Set ws = argument_wb.Worksheets("評鑑指標")
     last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
     
     For i = 2 To last_row
@@ -48,20 +48,24 @@ Function create_evaluation_item_dict(wb As Workbook) As Scripting.Dictionary
         evaluation_item_dict.Add evaluation_item_name, evaluation_item
     Next i
     
-    Set create_evaluation_item_dict = evaluation_item_dict
+    Set evaluation_item_dict_init = evaluation_item_dict
 End Function
 
 Private Sub test_create_evaluation_item_dict()
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim evaluation_item_name As Variant
     Dim evaluation_item As Variant
-    Dim wb As Workbook
+    Dim argument_wb As Workbook
 
-    Set wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
-    Set evaluation_item_dict = create_evaluation_item_dict(wb)
+    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
+    Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
     
     For Each evaluation_item_name In evaluation_item_dict.Keys
         Set evaluation_item = evaluation_item_dict(evaluation_item_name)
         MsgBox evaluation_item("id") & " " & evaluation_item_name & " " & evaluation_item("format") & " " & evaluation_item("sort") & " " & evaluation_item("summarize")
     Next evaluation_item_name
 End Sub
+
+Function source_path(evaluation_id)
+    source_path = ThisWorkbook.path & "/0. 原始資料/output-" & evaluation_id & "_data.xls"
+End Function

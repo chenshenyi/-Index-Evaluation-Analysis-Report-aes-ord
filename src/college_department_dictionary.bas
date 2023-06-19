@@ -1,4 +1,5 @@
 ' filename: college_department_dictionary
+' TODO: Optimize the structure of the dictionary
 
 ' college_department_dict
 '   key: college name
@@ -12,7 +13,7 @@
 '   Column C: Department name
 '   Column D: Department abbreviation
 
-Function create_college_department_dict(wb As Workbook) As Scripting.Dictionary
+Function college_department_dict_init(wb As Workbook) As Scripting.Dictionary
     
     Dim college_department_dict As Scripting.Dictionary
     Dim college_name As Variant
@@ -44,7 +45,7 @@ Function create_college_department_dict(wb As Workbook) As Scripting.Dictionary
         college_department_dict(college_name).Add department_dict
     Next i
     
-    Set create_college_department_dict = college_department_dict
+    Set college_department_dict_init = college_department_dict
 
 End Function
 
@@ -58,7 +59,7 @@ Private Sub test_create_college_department_dict()
     Dim wb As Workbook
 
     Set wb = Workbooks.Open(ThisWorkbook.path & "/B °Ñ¼Æ.xlsx")
-    Set college_department_dict = create_college_department_dict(wb)
+    Set college_department_dict = college_department_dict_init(wb)
     
     For Each college_name In college_department_dict.Keys
         MsgBox college_name
