@@ -59,11 +59,11 @@ Private Sub test_create_evaluation_item_dict()
 
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B °Ñ¼Æ.xlsx")
     Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
+    argument_wb.Close
     
-    For Each evaluation_item_name In evaluation_item_dict.Keys
-        Set evaluation_item = evaluation_item_dict(evaluation_item_name)
-        MsgBox evaluation_item("id") & " " & evaluation_item_name & " " & evaluation_item("format") & " " & evaluation_item("sort") & " " & evaluation_item("summarize")
-    Next evaluation_item_name
+    Dim file_path As String
+    file_path = ThisWorkbook.path & "/output/evaluation_item_dict.json"
+    print_to_file  file_path, json_str(evaluation_item_dict)
 End Sub
 
 Function source_path(evaluation_id)

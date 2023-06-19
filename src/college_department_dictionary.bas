@@ -1,4 +1,4 @@
-' filename: college_department_dictionary
+Attribute VB_Name = "college_department_dictionary"
 ' TODO: Optimize the structure of the dictionary
 
 ' college_department_dict
@@ -60,12 +60,9 @@ Private Sub test_create_college_department_dict()
 
     Set wb = Workbooks.Open(ThisWorkbook.path & "/B °Ñ¼Æ.xlsx")
     Set college_department_dict = college_department_dict_init(wb)
-    
-    For Each college_name In college_department_dict.Keys
-        MsgBox college_name
-        Set department_list = college_department_dict(college_name)
-        For Each department In department_list
-            MsgBox department("id") & " " & department("name") & " " & department("abbr")
-        Next department
-    Next college_name
+    wb.Close
+
+    Dim file_path As String
+    file_path = ThisWorkbook.path & "/output/college_department_dict.json"
+    print_to_file  file_path, json_str(college_department_dict)
 End Sub

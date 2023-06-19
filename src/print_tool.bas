@@ -68,5 +68,5 @@ Function print_to_file(file_path As String, content As String)
 End Function
 
 Private Sub test_print_to_file()
-    print_to_file ThisWorkbook.Path & "\HelloWorld.txt", "Hello World!"
+    print_to_file ThisWorkbook.Path & "\output\HelloWorld.txt", "Hello World!"
 End Sub
