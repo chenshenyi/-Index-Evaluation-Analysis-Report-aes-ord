@@ -1,5 +1,3 @@
-' coding: utf-8
-' spaces: 4
 
 ' Function merge_worksheet_in_multiple_workbooks(workbook_path_list As Variant, _
 '                                                 worksheet_name As String, _
@@ -56,10 +54,10 @@ Function reformulate_worksheets(wb As Workbook, _
             End If
 
             ' Re-formulate the cell with two datas
-            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "???ç¸?"
+            ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "???ï¿½?"
             ' `345.00 /8.82%` -> `8.82%` if avg_or_sum = "??????" 
 
-            If avg_or_sum = "???ç¸?" Then
+            If avg_or_sum = "???ï¿½?" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(0)
             ElseIf avg_or_sum = "??????" Then
                 ws.Cells(j, i).Value = Split(ws.Cells(j, i).Value, " /")(1)
@@ -74,5 +72,5 @@ Private Sub test_reformulate_worksheets()
     Dim wb As Workbook
 
     Set wb = Workbooks.Open(ThisWorkbook.path & "\origin-data-rearrangement.xlsx")
-    Call reformulate_worksheets(wb, "è¿?ä¸?å¹´æ??è¼?", "???ç¸?")
+    Call reformulate_worksheets(wb, "ï¿½?ï¿½?å¹´ï¿½??ï¿½?", "???ï¿½?")
 End Sub

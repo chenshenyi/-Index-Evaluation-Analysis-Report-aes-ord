@@ -1,5 +1,3 @@
-' coding: utf-8
-' spaces: 4
 
 Function paste_clipboard_to_placehold(wdDoc As Object, placehold As String)
 

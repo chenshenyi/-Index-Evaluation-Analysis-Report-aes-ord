@@ -1,4 +1,5 @@
 ' filename: evaluation_item_dictionary
+' TODO: Optimize the structure of the dictionary
 
 ' The format of the dictionary is as follows:
 ' evaluation_item_dict

@@ -1,4 +1,5 @@
 ' filename: evaluation_value_dictionary.cls
+' TODO: Optimize the structure of the dictionary
 
 ' The format of the dictionary is as follows:
 '   college evaluation value dictionary:
@@ -14,20 +15,6 @@
 '   K: two_year_ago
 '   N: three_year_ago
 'The first row is row 9
-
-' This module use the following dictionary:
-' college_department_dict
-'   key: college name
-'   value: [{id, name, abbr}] (list of department dictionary)
-' evaluation_item_dict
-'   key: evaluation item name
-'   value: {id, format, sort, summarize}
-'       id: String
-'       format: "整數數值" | "數值" | "百分比"
-'       sort: "遞增" | "遞減"
-'       summarize: "均值" | "加總"
-
-' This
 
 Function create_department_evaluation_value_dict(source_ws As worksheet, row As Integer, summarize As Variant) As Scripting.Dictionary
     Dim department_evaluation_value_dict As Scripting.Dictionary
