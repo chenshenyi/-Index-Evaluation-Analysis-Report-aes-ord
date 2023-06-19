@@ -57,8 +57,10 @@ Private Sub test_evaluation_items_value_dict_init()
 
     Dim evaluation_items_value_dict As Scripting.Dictionary
     Set evaluation_items_value_dict = evaluation_items_value_dict_init(argument_wb)
-
-    Debug.Print json_str(evaluation_items_value_dict)
+    
+    Dim file_path As String
+    file_path = ThisWorkbook.path & "/output/evaluation_items_value_dict.json"
+    print_to_file  file_path, json_str(evaluation_items_value_dict)
 
     argument_wb.Close
 End Sub
@@ -76,10 +78,10 @@ Function evaluation_value_dict_init(ws As Worksheet, summarize As Variant) As Sc
 
     
     Set school_dict = New Scripting.Dictionary
-    school_dict.Add ws.Range("B9"), department_value_dict_init(ws, 9, summarize)
+    school_dict.Add ws.Range("B9").Text, department_value_dict_init(ws, 9, summarize)
 
     Set evaluation_value_dict = New Scripting.Dictionary
-    evaluation_value_dict.Add ws.Range("A9"), school_dict
+    evaluation_value_dict.Add ws.Range("A9").Text, school_dict
 
     Dim row As Integer
     row = 10

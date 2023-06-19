@@ -7,9 +7,10 @@ Function json_str(iterable As Variant, Optional indent As Integer = 0)
         json_str = dict_json(iterable, indent)
     ElseIf TypeOf iterable Is Collection Then
         json_str = collection_json(iterable, indent)
-    Else
-        ' if iterable is not a dictionary or a collection, return the string representation of the iterable
+    ElseIf IsNumeric(iterable) Then 
         json_str = iterable
+    Else
+        json_str = """" & iterable & """"
     End If
 End Function
 
@@ -55,4 +56,17 @@ Private Sub test_json_str()
     Debug.Print json_str(dict)
     Debug.Print json_str(clcn)
     Debug.Print json_str(multilayer_dict)
+End Sub
+
+Function print_to_file(file_path As String, content As String)
+    Dim fso As Scripting.FileSystemObject
+    Set fso = New Scripting.FileSystemObject
+    Dim file As Scripting.TextStream
+    Set file = fso.CreateTextFile(file_path, True)
+    file.Write content
+    file.Close
+End Function
+
+Private Sub test_print_to_file()
+    print_to_file ThisWorkbook.Path & "\HelloWorld.txt", "Hello World!"
 End Sub
