@@ -1,3 +1,4 @@
+Attribute VB_Name = "clipboard"
 
 Function paste_clipboard_to_placehold(wdDoc As Object, placehold As String)
 
@@ -29,7 +30,7 @@ Function create_content_control(wdDoc As Object, placehold As String)
 
 End Function
 
-Sub paste_clipboard_to_placehold_test()
+Private Sub paste_clipboard_to_placehold_test()
 
     Dim wdApp As Object
     Dim wdDoc As Object

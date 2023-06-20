@@ -1,3 +1,4 @@
 {
-    "files.encoding": "big5hkscs"
+    "files.encoding": "big5hkscs",
+    "vbecm.vbsEncode": "Big5-HKSCS"
 }

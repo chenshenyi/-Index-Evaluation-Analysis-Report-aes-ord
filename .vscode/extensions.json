@@ -1,5 +1,14 @@
 {
     "recommendations": [
-        "richie5um2.vscode-sort-json"
+        "aaron-bond.better-comments",
+        "janisdd.vscode-edit-csv",
+        "github.copilot",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "bierner.markdown-preview-github-styles",
+        "gerrnperl.outline-map",
+        "christian-kohler.path-intellisense",
+        "mechatroner.rainbow-csv",
+        "grapecity.gc-excelviewer"
     ]
 }

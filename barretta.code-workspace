@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.associations": {
+      "*.cls": "vb",
+      "*.bas": "vb",
+      "*.frm": "vb"
+    }
+  }
+}
