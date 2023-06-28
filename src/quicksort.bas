@@ -1,5 +1,16 @@
 Attribute VB_Name = "quick_sort"
 
+Sub quickSort(list, ByVal left As Integer, ByVal right As Integer, Optional sortBy As String = "»¼¼W")
+    Dim pivotIndex As Integer
+    
+    If left < right Then
+        pivotIndex = (left + right) / 2
+        pivotIndex = partition(list, left, right, pivotIndex, sortBy)
+        quickSort list, left, pivotIndex-1, sortBy
+        quickSort list, pivotIndex+1, right, sortBy
+    End If
+End Sub
+
 Function partition(list, ByVal left As Integer, ByVal right As Integer, ByVal pivotIndex As Integer, sortBy As String) As Integer
     Dim pivotValue As Integer
     Dim storeIndex As Integer
@@ -25,18 +36,6 @@ Sub swap(list, ByVal a As Integer, ByVal b As Integer)
     temp = list(a)
     list(a) = list(b)
     list(b) = temp
-End Sub
-
-
-Sub quickSort(list, ByVal left As Integer, ByVal right As Integer, Optional sortBy As String = "»¼¼W")
-    Dim pivotIndex As Integer
-    
-    If left < right Then
-        pivotIndex = (left + right) / 2
-        pivotIndex = partition(list, left, right, pivotIndex, sortBy)
-        quickSort list, left, pivotIndex-1, sortBy
-        quickSort list, pivotIndex+1, right, sortBy
-    End If
 End Sub
 
 Sub test_quickSort()

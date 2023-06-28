@@ -36,13 +36,13 @@ Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Diction
         evaluation_item_id = ws.Cells(i, 1).Value
         evaluation_item_name = ws.Cells(i, 2).Value
         evaluation_item_format = ws.Cells(i, 3).Value
-        evaluation_item_sort = ws.Cells(i, 4).Value
+        evaluation_item_sortBy = ws.Cells(i, 4).Value
         evaluation_item_summarize = ws.Cells(i, 5).Value
         
         Set evaluation_item = New Scripting.Dictionary
         evaluation_item.Add "id", evaluation_item_id
         evaluation_item.Add "format", evaluation_item_format
-        evaluation_item.Add "sortBy", evaluation_item_sort
+        evaluation_item.Add "sortBy", evaluation_item_sortBy
         evaluation_item.Add "summarize", evaluation_item_summarize
         
         evaluation_item_dict.Add evaluation_item_name, evaluation_item

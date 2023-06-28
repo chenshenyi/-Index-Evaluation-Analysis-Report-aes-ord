@@ -1,4 +1,101 @@
 {
     "files.encoding": "big5hkscs",
-    "vbecm.vbsEncode": "Big5-HKSCS"
+    "vbecm.vbsEncode": "Big5-HKSCS",
+    "chineseColors.jp": true,
+    "better-comments.tags": [
+
+
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "parameter",
+            "color": "#d5cbff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#98C379",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "Passed",
+            "color": "#ffffff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#338855",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "Failed",
+            "color": "#ffffff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#aa3333",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "======",
+            "color": "#ffffff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#336688",
+            "bold": true,
+            "italic": false
+        },
+        {
+            "tag": "Caution: ",
+            "color": "#ffffff",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "#bb6600",
+            "bold": false,
+            "italic": false
+        }
+
+    ],
+
 }

@@ -1,6 +1,23 @@
 Attribute VB_Name = "print_tool"
 
-' This file print the content of a dictionary or a collection in json format
+
+' ================================= print =================================
+Function print_to_file(ByVal file_path As String, content As String)
+    Dim fso As Scripting.FileSystemObject
+    Set fso = New Scripting.FileSystemObject
+    Dim file As Scripting.TextStream
+    Set file = fso.CreateTextFile(file_path, True)
+    file.Write content
+    file.Close
+End Function
+
+' Passed test
+Private Sub test_print_to_file()
+    print_to_file ThisWorkbook.Path & "\output\HelloWorld.txt", "Hello World!"
+End Sub
+
+
+' ================================= json =================================
 
 Function json_str(iterable As Variant, Optional indent As Integer = 0)
     If TypeOf iterable Is Scripting.Dictionary Then
@@ -30,6 +47,7 @@ Function collection_json(clcn As Variant, indent As Integer)
     collection_json = Left(collection_json, Len(collection_json) - 1) & vbCrLf & Space(indent) & "]"
 End Function
 
+' Passed test
 Private Sub test_json_str()
     Dim dict As Scripting.Dictionary
     Set dict = New Scripting.Dictionary
@@ -58,18 +76,8 @@ Private Sub test_json_str()
     Debug.Print json_str(multilayer_dict)
 End Sub
 
-Function print_to_file(ByVal file_path As String, content As String)
-    Dim fso As Scripting.FileSystemObject
-    Set fso = New Scripting.FileSystemObject
-    Dim file As Scripting.TextStream
-    Set file = fso.CreateTextFile(file_path, True)
-    file.Write content
-    file.Close
-End Function
 
-Private Sub test_print_to_file()
-    print_to_file ThisWorkbook.Path & "\output\HelloWorld.txt", "Hello World!"
-End Sub
+' ================================= csv =================================
 
 Function csv_str(iterable As Variant, Optional father As String = "")
     If TypeOf iterable Is Scripting.Dictionary Then
@@ -97,6 +105,7 @@ Function collection_csv(clcn As Variant, Optional father As String = "")
     Next
 End Function
 
+' Passed test
 Private Sub test_csv_str()
     Dim dict As Scripting.Dictionary
     Set dict = New Scripting.Dictionary
@@ -124,3 +133,73 @@ Private Sub test_csv_str()
     print_to_file pth, csv_str(multilayer_dict)
 
 End Sub
+
+
+' ================================= csv_expand_last =================================
+
+Function csv_expand_last_str(iterable As Variant, Optional father As String = "")
+
+    If TypeOf iterable Is Scripting.Dictionary Then
+        csv_expand_last_str = dict_expand_last_csv(iterable, father)
+    ElseIf TypeOf iterable Is Collection Then
+        csv_expand_last_str = collection_expand_last_csv(iterable, father)
+    ElseIf IsNumeric(iterable) Then 
+        csv_expand_last_str = father & iterable
+    Else
+        csv_expand_last_str = father & """" & iterable & """" 
+    End If
+End Function
+
+Function dict_expand_last_csv(dict As Variant, Optional father As String = "")
+    dict_expand_last_csv = ""
+    
+    k = dict.Keys()(1)
+    If Not TypeOf dict(k) Is Scripting.Dictionary And Not TypeOf dict(k) Is Collection Then
+        dict_expand_last_csv = father
+        For Each key In dict
+            dict_expand_last_csv = dict_expand_last_csv & csv_expand_last_str(dict(key), key & ": ") & ", "
+        Next
+        dict_expand_last_csv = dict_expand_last_csv & vbCrLf
+    Else
+        For Each key In dict
+            dict_expand_last_csv = dict_expand_last_csv & csv_expand_last_str(dict(key), father & key & ", ")
+        Next
+    End If
+End Function
+
+Function collection_expand_last_csv(clcn As Variant, Optional father As String = "")
+    collection_expand_last_csv = ""
+    
+    If Not TypeOf clcn(1) Is Scripting.Dictionary And Not TypeOf clcn(1) Is Collection Then
+        collection_expand_last_csv = father
+        For Each item In clcn
+            collection_expand_last_csv = collection_expand_last_csv & csv_expand_last_str(item, "") & ", "
+        Next
+        collection_expand_last_csv = collection_expand_last_csv & vbCrLf
+    Else
+        For Each item In clcn
+            collection_expand_last_csv = collection_expand_last_csv & csv_expand_last_str(item, father)
+        Next
+    End If
+End Function
+
+Private Sub test_csv_expand_last_str()
+    Dim dict As Scripting.Dictionary
+    Set dict = New Scripting.Dictionary
+    dict.Add "key1", "value1"
+    dict.Add "key2", "value2"
+    dict.Add "key3", "value3"
+    dict.Add "key4", "value4"
+    
+    Dim multilayer_dict As Scripting.Dictionary
+    Set multilayer_dict = New Scripting.Dictionary
+    multilayer_dict.Add "key8", dict
+    multilayer_dict.Add "key9", dict
+    multilayer_dict.Add "key10", dict
+    multilayer_dict.Add "key11", dict
+
+    pth = ThisWorkbook.Path & "\output\csv_expand_last_str.csv"
+    print_to_file pth, csv_expand_last_str(multilayer_dict)
+
+End Sub
+
