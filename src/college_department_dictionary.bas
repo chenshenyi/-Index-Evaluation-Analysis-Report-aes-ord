@@ -1,5 +1,6 @@
 Attribute VB_Name = "college_department_dictionary"
-' TODO: Optimize the structure of the dictionary
+
+' Passed all test
 
 ' college_department_dict
 '   key: college name
@@ -49,6 +50,7 @@ Function college_department_dict_init(wb As Workbook) As Scripting.Dictionary
 
 End Function
 
+' Passed test
 Private Sub test_create_college_department_dict()
     
     Dim college_department_dict As Scripting.Dictionary
@@ -68,6 +70,6 @@ Private Sub test_create_college_department_dict()
 End Sub
 
 ' The path of the file that stores the data of the college in "1. 各院彙整資料"
-Function path_dir1(ByVal college_name As String) As String
-    path_dir1 = ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx"
+Function college_excel_path(ByVal college_name As String) As String
+    college_excel_path = ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx"
 End Function

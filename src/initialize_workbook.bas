@@ -43,7 +43,7 @@ Sub initialize_all_workbooks()
     Call create_workbooks_by_college_names(college_department_dict.keys)
 
     For Each college In college_department_dict.keys
-        Set wb = Workbooks.Open(path_dir1(college))
+        Set wb = Workbooks.Open(college_excel_path(college))
         Call initialize_summary_worksheet(wb, college_department_dict(college), evaluation_item_dict)
         
         ' Initialize the worksheets by evaluation items
@@ -72,6 +72,8 @@ Sub initialize_all_workbooks()
     Application.ScreenUpdating = True
 End Sub
 
+' =========================================== 統一初始化 ===========================================
+
 ' * Create workbooks by college names
 ' The workbooks will be created in the target folder
 ' Parameter:
@@ -83,7 +85,7 @@ Function create_workbooks_by_college_names(college_name_list As Variant)
     Dim college_name As Variant
     
     For Each college_name In college_name_list
-        output_workbook_name = path_dir1(college_name)
+        output_workbook_name = college_excel_path(college_name)
         
         ' If the output wb already exists, then go to the next college name
         If Dir(output_workbook_name) <> "" Then
@@ -191,6 +193,8 @@ Function get_year() As Integer
     get_year = year
 End Function
 
+' ======================================== 編輯各院內容 ========================================
+
 ' * Insert new rows according to the number of departments
 ' This function will insert empty rows between row 2 and row 3
 ' Parameter: 
@@ -270,10 +274,12 @@ Function write_department_names(wb As Workbook, ByVal worksheet_name As String, 
 
     Set sht = wb.Worksheets(worksheet_name)
 
+    surfix = ""
     ' write row 2
     If department_list(1)("name") = "政治大學" Then
         sht.Cells(2, 1) = department_list(1)("id") & " " & department_list(1)("name") & "（校加總 / 校均值）"
         sht.Cells(2, 2) = "校" & summarize
+        surfix = "（院加總 / 院均值）"
     Else
         sht.Cells(2, 1) = department_list(1)("id") & " " & department_list(1)("name") & "（院加總 / 院均值）"
         sht.Cells(2, 2) = "院" & summarize
@@ -287,7 +293,8 @@ Function write_department_names(wb As Workbook, ByVal worksheet_name As String, 
         If department("name") = department_list(1)("name") Then
             GoTo NextDepartment
         End If
-        sht.Cells(r, 1) = department("id") & " " & department("name")
+        
+        sht.Cells(r, 1) = department("id") & " " & department("name") & surfix
         sht.Cells(r, 2) = department("abbr")
         r = r + 1
 NextDepartment:
@@ -308,6 +315,8 @@ Private Sub test_write_department_names()
     
     Call write_department_names(ThisWorkbook, "test1", department_list, "加總")
 End Sub
+
+' ========================================== 小結表格 ==========================================
 
 ' Initialize the worksheet "小結"
 ' The first row is the abbreviation of the colleges

@@ -1,5 +1,6 @@
 Attribute VB_Name = "evaluation_item_dictionary"
-' TODO: Optimize the structure of the dictionary
+
+' Passed all test
 
 ' The format of the dictionary is as follows:
 ' evaluation_item_dict
@@ -51,6 +52,7 @@ Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Diction
     Set evaluation_item_dict_init = evaluation_item_dict
 End Function
 
+' Passed test
 Private Sub test_create_evaluation_item_dict()
     Dim evaluation_item_dict As Scripting.Dictionary
     Dim evaluation_item_name As Variant
@@ -66,6 +68,6 @@ Private Sub test_create_evaluation_item_dict()
     print_to_file  file_path, json_str(evaluation_item_dict)
 End Sub
 
-Function source_path(ByVal evaluation_id As String) As String
-    source_path = ThisWorkbook.path & "/0. 原始資料/output-" & evaluation_id & "_data.xls"
+Function evaluation_item_source_data_path(ByVal evaluation_id As String) As String
+    evaluation_item_source_data_path = ThisWorkbook.path & "/0. 原始資料/output-" & evaluation_id & "_data.xls"
 End Function

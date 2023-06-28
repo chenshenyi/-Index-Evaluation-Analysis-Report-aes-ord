@@ -1,7 +1,9 @@
 Attribute VB_Name = "print_tool"
 
+' Passed all tests
 
 ' ================================= print =================================
+' * 將字串輸出到檔案
 Function print_to_file(ByVal file_path As String, content As String)
     Dim fso As Scripting.FileSystemObject
     Set fso = New Scripting.FileSystemObject
@@ -19,7 +21,9 @@ End Sub
 
 ' ================================= json =================================
 
+' * 將字典或集合轉換成 JSON 字串
 Function json_str(iterable As Variant, Optional indent As Integer = 0)
+    ' 遞迴函式，用來處理多層的字典或集合
     If TypeOf iterable Is Scripting.Dictionary Then
         json_str = dict_json(iterable, indent)
     ElseIf TypeOf iterable Is Collection Then
@@ -79,7 +83,9 @@ End Sub
 
 ' ================================= csv =================================
 
+' * 將字典或集合轉換成 CSV 字串
 Function csv_str(iterable As Variant, Optional father As String = "")
+    ' 遞迴函式，用來處理多層的字典或集合
     If TypeOf iterable Is Scripting.Dictionary Then
         csv_str = dict_csv(iterable, father)
     ElseIf TypeOf iterable Is Collection Then
@@ -137,6 +143,7 @@ End Sub
 
 ' ================================= csv_expand_last =================================
 
+' * 將字典或集合轉換成 CSV 字串，並將最後一層的容器展開(根據該容器第一個項目的型別判斷)
 Function csv_expand_last_str(iterable As Variant, Optional father As String = "")
 
     If TypeOf iterable Is Scripting.Dictionary Then
@@ -154,12 +161,14 @@ Function dict_expand_last_csv(dict As Variant, Optional father As String = "")
     dict_expand_last_csv = ""
     
     k = dict.Keys()(1)
+    ' 如果第一個項目不是容器，則直接展開
     If Not TypeOf dict(k) Is Scripting.Dictionary And Not TypeOf dict(k) Is Collection Then
         dict_expand_last_csv = father
         For Each key In dict
             dict_expand_last_csv = dict_expand_last_csv & csv_expand_last_str(dict(key), key & ": ") & ", "
         Next
         dict_expand_last_csv = dict_expand_last_csv & vbCrLf
+    ' 如果第一個項目是容器，則遞迴處理
     Else
         For Each key In dict
             dict_expand_last_csv = dict_expand_last_csv & csv_expand_last_str(dict(key), father & key & ", ")
@@ -183,6 +192,7 @@ Function collection_expand_last_csv(clcn As Variant, Optional father As String =
     End If
 End Function
 
+' Passed test
 Private Sub test_csv_expand_last_str()
     Dim dict As Scripting.Dictionary
     Set dict = New Scripting.Dictionary

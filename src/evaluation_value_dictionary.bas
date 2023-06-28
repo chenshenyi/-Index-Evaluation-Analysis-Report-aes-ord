@@ -47,7 +47,7 @@ Function evaluation_items_value_dict_init(argument_wb As Workbook, evaluation_it
         id = evaluation_item("id")
         sortBy = evaluation_item("sortBy")
  
-        Set wb = Workbooks.Open(source_path(id))
+        Set wb = Workbooks.Open(evaluation_item_source_data_path(id))
         Set ws = wb.Worksheets("近三年比較")
 
         evaluation_item.add "evaluation_value_dict", evaluation_value_dict_init(ws, summarize)        
