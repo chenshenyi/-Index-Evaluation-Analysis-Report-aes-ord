@@ -3,13 +3,13 @@ Attribute VB_Name = "evaluation_value_dictionary"
 ' The format of the dictionary is as follows:
 ' evaluation_items_value_dict:
 '   key: evaluation_item_name
-'   value: {id, format, sort, summarize, evaluation_value_dict}
+'   value: {id, format, sortBy, summarize, evaluation_value_dict}
 
 '   evaluation_value_dict:
 '       key: college_name
 '       value: {department_name: department_value_dict}
 
-'       department_value_dict: {avg, year3, year2, year1}
+'       department_value_dict: {avg, year3, year2, year1, rank}
 
 ' The data is stored in the following format:
 ' The first row is row 9
@@ -23,12 +23,16 @@ Attribute VB_Name = "evaluation_value_dictionary"
 
 ' evaluation_items_value_dict:
 '   key: evaluation_item_name
-'   value: {id, format, sort, summarize, evaluation_value_dict}
+'   value: {id, format, sortBy, summarize, evaluation_value_dict}
+' Parameter:
+'   argument_wb: the workbook of the argument file 'B 參數.xlsx'
+'   evaluation_item_list: the list of evaluation item names
 Function evaluation_items_value_dict_init(argument_wb As Workbook, evaluation_item_list As Collection) As Scripting.Dictionary
     Dim evaluation_items_value_dict As Scripting.Dictionary
     Dim evaluation_item As Scripting.Dictionary
     Dim id As String
     Dim summarize As String
+    Dim sortBy As String
     Dim wb As Workbook
     Dim ws As Worksheet
 
@@ -38,11 +42,12 @@ Function evaluation_items_value_dict_init(argument_wb As Workbook, evaluation_it
         Set evaluation_item = evaluation_items_value_dict(evaluation_item_name)
         summarize = evaluation_item("summarize")
         id = evaluation_item("id")
+        sortBy = evaluation_item("sortBy")
  
         Set wb = Workbooks.Open(source_path(id))
         Set ws = wb.Worksheets("近三年比較")
 
-        evaluation_item.add "evaluation_value_dict", evaluation_value_dict_init(ws, summarize)
+        evaluation_item.add "evaluation_value_dict", evaluation_value_dict_init(ws, summarize, sortBy)
 
         wb.Close
     Next evaluation_item_name
@@ -78,10 +83,128 @@ Private Sub test_evaluation_items_value_dict_init()
     argument_wb.Close
 End Sub
 
+' TODO: apply college_rank_eq to each college in evaluation_value_dict
+
+' * Add 'rank' to each department
+' * (comparing to the other departments in the same college)
+' Parameter:
+'   evaluation_value_dict: the evaluation_value_dict initialized by `evaluation_value_dict_init`
+'   college_name: the name of the college with college id(eg. '100 文學院')
+'   sortBy: '遞增' or '遞減'
+Function college_rank_eq(evaluation_value_dict As Scripting.Dictionary, ByVal college_name As String, ByVal sortBy As String)
+    Dim department_avg_list As Collection
+    Set department_avg_list = New Collection
+
+    For Each department_name In evaluation_value_dict(college_name)
+        ' 如果 department_name 前三碼和 college_name 前三碼相同 或是 avg 是 "-" 就不加入
+        avg = evaluation_value_dict(college_name)(department_name)("avg")
+        If Left(department_name, 3) <> Left(college_name, 3) And avg<>"-" Then
+            department_avg_list.Add avg
+        End if
+    Next department_name
+
+    For Each department_name In evaluation_value_dict(college_name)
+        avg = evaluation_value_dict(college_name)(department_name)("avg")
+
+        ' 如果 department_name 前三碼和 college_name 前三碼相同
+        If department_name = college_name Then
+            evaluation_value_dict(college_name)(department_name).Add "rank", 999
+        ElseIf Left(department_name, 3) = Left(college_name, 3) Then
+            evaluation_value_dict(college_name)(department_name).Add "rank", 998
+        ElseIf avg = "-" Then
+            evaluation_value_dict(college_name)(department_name).Add "rank", "-"
+        Else
+            rank = rank_eq(department_avg_list, avg, sortBy)
+            evaluation_value_dict(college_name)(department_name).Add "rank", rank
+        End if
+    Next department_name
+End Function
+
+' Passed test
+Private Sub test_college_rank_eq()
+
+    Dim evaluation_value_dict As Scripting.Dictionary
+    Dim wb As Workbook
+    Dim ws As Worksheet
+
+    Set wb = Workbooks.Open(ThisWorkbook.path & "/0. 原始資料/output-1.1.1.1_data.xls")
+    Set ws = wb.Worksheets("近三年比較")
+    Set evaluation_value_dict = evaluation_value_dict_init(ws, "均值")
+
+    Dim college_name1 As String
+    Dim college_name2 As String
+    Dim college_name3 As String
+    college_name1 = "100 文學院"
+    college_name2 = "700 理學院"
+    college_name3 = "200 社會科學院"
+    
+
+    college_rank_eq evaluation_value_dict, college_name1, "遞增"
+    college_rank_eq evaluation_value_dict, college_name2, "遞減"
+    college_rank_eq evaluation_value_dict, college_name3, "遞減"
+
+    Dim file_path As String
+    file_path = ThisWorkbook.path & "/output/college_rank_eq.json"
+    print_to_file file_path, json_str(evaluation_value_dict(college_name1))
+    file_path = ThisWorkbook.path & "/output/college_rank_eq.csv"
+    print_to_file file_path, csv_str(evaluation_value_dict(college_name1)) & vbCrLf & vbCrLf & _
+                            csv_str(evaluation_value_dict(college_name2)) & vbCrLf & vbCrLf & _
+                            csv_str(evaluation_value_dict(college_name3))
+
+End Sub
+
+' Parameter:
+'   value_list: collection of all values
+'   v: value to be ranked
+'   sortBy: "遞增" or "遞減"
+Function rank_eq(value_list As Collection, ByVal v As Double, ByVal sortBy As String) As Integer
+    Dim i As Integer
+    Dim rank As Integer
+    Dim list_length As Integer
+    Dim list_item As Double
+
+    list_length = value_list.Count
+    rank = 0
+
+    For i = 1 To list_length
+        list_item = value_list(i)
+        If sortBy = "遞增" Then
+            If v > list_item Then
+                rank = rank + 1
+            End If
+        ElseIf sortBy = "遞減" Then
+            If v < list_item Then
+                rank = rank + 1
+            End If
+        End If
+    Next i
+    rank_eq = rank +1
+End Function
+
+' passed test
+Private Sub test_rank_eq()
+    Dim sorted_list As Collection
+    Set sorted_list = New Collection
+    sorted_list.Add 1
+    sorted_list.Add 2
+    sorted_list.Add 3
+    sorted_list.Add 3
+    sorted_list.Add 5
+
+    Debug.Print rank_eq(sorted_list, 1, "遞增")
+    Debug.Print rank_eq(sorted_list, 2, "遞增")
+    Debug.Print rank_eq(sorted_list, 3, "遞減")
+    Debug.Print rank_eq(sorted_list, 4, "遞減")
+    Debug.Print rank_eq(sorted_list, 5, "遞減")
+End Sub
+
 ' evaluation_value_dict:
 '   key: college_name
 '   value: {department_name: department_value_dict}
-Function evaluation_value_dict_init(ws As Worksheet, summarize As Variant) As Scripting.Dictionary
+' parameter:
+'   ws: '近三年比較' of original data
+'   summarize: "加總" or "均值"
+Function evaluation_value_dict_init(ws As Worksheet, ByVal summarize As String) As Scripting.Dictionary
     Dim evaluation_value_dict As Scripting.Dictionary
     Dim school_dict As Scripting.Dictionary
 
@@ -91,21 +214,23 @@ Function evaluation_value_dict_init(ws As Worksheet, summarize As Variant) As Sc
     Dim department_name As String
     Dim department_value_dict As Scripting.Dictionary
 
-    ' 特別標出校級資料
+    ' 校級資料字典
     Set school_dict = New Scripting.Dictionary
     school_dict.Add ws.Range("B9").Text, department_value_dict_init(ws, 9, summarize)
 
+    ' 將校級資料字典儲存至指標數據字典中
     Set evaluation_value_dict = New Scripting.Dictionary
     evaluation_value_dict.Add ws.Range("A9").Text, school_dict
-
+    
+    ' 將各系資料儲存至院的字典中
     Dim row As Integer
     row = 10
-
     Do While ws.Range("B" & row) <> ""
         
         department_name = ws.Range("B" & row)
         Set department_value_dict = department_value_dict_init(ws, row, summarize)
 
+        ' 如果是新的院
         If ws.Range("A" & row) <> "" Then
             college_name = ws.Range("A" & row)
             school_dict.Add department_name, department_value_dict ' 將各院資料儲存至校的字典中
@@ -113,6 +238,7 @@ Function evaluation_value_dict_init(ws As Worksheet, summarize As Variant) As Sc
             evaluation_value_dict.Add college_name, college_dict
         End If
 
+        ' 將系資料儲存至院的字典中
         evaluation_value_dict(college_name).Add department_name, department_value_dict
 
         row = row + 1
@@ -121,6 +247,7 @@ Function evaluation_value_dict_init(ws As Worksheet, summarize As Variant) As Sc
     Set evaluation_value_dict_init = evaluation_value_dict
 End Function
 
+' passed test
 Private Sub test_evaluation_value_dict()
     Dim wb As Workbook
     Dim ws As worksheet
@@ -138,10 +265,15 @@ Private Sub test_evaluation_value_dict()
 End Sub
 
 ' department_value_dict: {avg, year3, year2, year1}
-Function department_value_dict_init(ws As Worksheet, row As Integer, summarize As Variant) As Scripting.Dictionary
+' parameter:
+'   ws: '近三年比較' of original data
+'   row: row number of data
+'   summarize: "加總" or "均值"
+Function department_value_dict_init(ws As Worksheet, ByVal row As Integer, ByVal summarize As String) As Scripting.Dictionary
     Dim department_value_dict As Scripting.Dictionary
     Set department_value_dict = New Scripting.Dictionary
 
+    ' 將各欄位資料儲存至系的字典中
     department_value_dict.Add "avg", reformulate_value(ws.Range("E" & row), summarize)
     department_value_dict.Add "year3", reformulate_value(ws.Range("H" & row), summarize)
     department_value_dict.Add "year2", reformulate_value(ws.Range("K" & row), summarize)
@@ -150,6 +282,7 @@ Function department_value_dict_init(ws As Worksheet, row As Integer, summarize A
     Set department_value_dict_init = department_value_dict
 End Function
 
+' passed test
 Private Sub test_department_value_dict_init()
     Dim wb As Workbook
     Dim ws As worksheet
@@ -167,9 +300,13 @@ End Sub
 ' if " /" exists in the cell
 ' `345.00 /8.82%` -> `345.00` if avg_or_sum = "加總"
 ' `345.00 /8.82%` -> `0.0882` if avg_or_sum = "均值"
-Function reformulate_value(value As String, summarize As Variant) As String
-    If Not InStr(value, " /") = 0 Then
-        ' use split, " /" as delimiter
+' parameter:
+'   value: cell value
+'   summarize: "加總" or "均值"
+Function reformulate_value(ByVal value As String, ByVal summarize As String) As String
+    
+    ' 如果有 " /"，則根據 summarize 取出數值
+    If InStr(value, " /") Then
         Select Case summarize
             Case "加總"
                 value = Split(value, " /")(0)
@@ -178,7 +315,11 @@ Function reformulate_value(value As String, summarize As Variant) As String
         End Select
     End If
 
-    ' Test if "%" exists in the cell
+    If value = "-1" or value = "" Then
+        value = "-"
+    End If
+
+    ' 將百分比轉換為小數
     If InStr(value, "%") Then
         value = Left(value, Len(value) - 1) / 100
     End If
@@ -186,6 +327,7 @@ Function reformulate_value(value As String, summarize As Variant) As String
     reformulate_value = value
 End Function
 
+' passed test
 Private Sub test_reformulate_value()
     Debug.Print reformulate_value("345.00 /8.82%", "加總")
     Debug.Print reformulate_value("345.00 /8.82%", "均值")

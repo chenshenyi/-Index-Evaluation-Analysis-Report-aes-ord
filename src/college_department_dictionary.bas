@@ -66,3 +66,8 @@ Private Sub test_create_college_department_dict()
     file_path = ThisWorkbook.path & "/output/college_department_dict.json"
     print_to_file  file_path, json_str(college_department_dict)
 End Sub
+
+' The path of the file that stores the data of the college in "1. 各院彙整資料"
+Function path_dir1(ByVal college_name As String) As String
+    path_dir1 = ThisWorkbook.path & "/1. 各院彙整資料/" & college_name & ".xlsx"
+End Function

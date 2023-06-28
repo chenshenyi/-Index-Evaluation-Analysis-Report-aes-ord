@@ -58,7 +58,7 @@ Private Sub test_json_str()
     Debug.Print json_str(multilayer_dict)
 End Sub
 
-Function print_to_file(file_path As String, content As String)
+Function print_to_file(ByVal file_path As String, content As String)
     Dim fso As Scripting.FileSystemObject
     Set fso = New Scripting.FileSystemObject
     Dim file As Scripting.TextStream
@@ -69,4 +69,58 @@ End Function
 
 Private Sub test_print_to_file()
     print_to_file ThisWorkbook.Path & "\output\HelloWorld.txt", "Hello World!"
+End Sub
+
+Function csv_str(iterable As Variant, Optional father As String = "")
+    If TypeOf iterable Is Scripting.Dictionary Then
+        csv_str = dict_csv(iterable, father)
+    ElseIf TypeOf iterable Is Collection Then
+        csv_str = collection_csv(iterable, father)
+    ElseIf IsNumeric(iterable) Then 
+        csv_str = father & iterable & vbCrLf
+    Else
+        csv_str = father & """" & iterable & """" & vbCrLf
+    End If
+End Function
+
+Function dict_csv(dict As Variant, Optional father As String = "")
+    dict_csv = ""
+    For Each key In dict
+        dict_csv = dict_csv & csv_str(dict(key), father & key & ", ")
+    Next
+End Function
+
+Function collection_csv(clcn As Variant, Optional father As String = "")
+    collection_csv = ""
+    For Each item In clcn
+        collection_csv = collection_csv & csv_str(item, father)
+    Next
+End Function
+
+Private Sub test_csv_str()
+    Dim dict As Scripting.Dictionary
+    Set dict = New Scripting.Dictionary
+    dict.Add "key1", "value1"
+    dict.Add "key2", "value2"
+    dict.Add "key3", "value3"
+    dict.Add "key4", "value4"
+    
+    Dim clcn As Collection
+    Set clcn = New Collection
+    clcn.Add "item1"
+    clcn.Add "item2"
+    clcn.Add "item3"
+    clcn.Add "item4"
+    clcn.Add "item5"
+
+    Dim multilayer_dict As Scripting.Dictionary
+    Set multilayer_dict = New Scripting.Dictionary
+    multilayer_dict.Add "key8", "value1"
+    multilayer_dict.Add "key9", "value2"
+    multilayer_dict.Add "key10", dict
+    multilayer_dict.Add "key11", clcn
+
+    pth = ThisWorkbook.Path & "\output\csv_str.csv"
+    print_to_file pth, csv_str(multilayer_dict)
+
 End Sub

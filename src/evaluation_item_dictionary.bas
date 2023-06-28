@@ -4,10 +4,10 @@ Attribute VB_Name = "evaluation_item_dictionary"
 ' The format of the dictionary is as follows:
 ' evaluation_item_dict
 '   key: evaluation item name
-'   value: {id, format, sort, summarize, source}
+'   value: {id, format, sortBy, summarize, source}
 '       id: String
 '       format: "整數數值" | "數值" | "百分比"
-'       sort: "遞增" | "遞減"
+'       sortBy: "遞增" | "遞減"
 '       summarize: "均值" | "加總"
 
 ' The data is stored in the worksheet "評鑑指標" in "B 參數.xlsx"
@@ -15,7 +15,7 @@ Attribute VB_Name = "evaluation_item_dictionary"
 '   Column A: Evaluation item id
 '   Column B: Evaluation item name
 '   Column C: Evaluation item format
-'   Column D: Evaluation item sort
+'   Column D: Evaluation item sortBy
 '   Column E: Evaluation item summarize
 
 Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Dictionary
@@ -42,7 +42,7 @@ Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Diction
         Set evaluation_item = New Scripting.Dictionary
         evaluation_item.Add "id", evaluation_item_id
         evaluation_item.Add "format", evaluation_item_format
-        evaluation_item.Add "sort", evaluation_item_sort
+        evaluation_item.Add "sortBy", evaluation_item_sort
         evaluation_item.Add "summarize", evaluation_item_summarize
         
         evaluation_item_dict.Add evaluation_item_name, evaluation_item
@@ -66,6 +66,6 @@ Private Sub test_create_evaluation_item_dict()
     print_to_file  file_path, json_str(evaluation_item_dict)
 End Sub
 
-Function source_path(evaluation_id)
+Function source_path(ByVal evaluation_id As String) As String
     source_path = ThisWorkbook.path & "/0. 原始資料/output-" & evaluation_id & "_data.xls"
 End Function

@@ -6,10 +6,10 @@ Attribute VB_Name = "initialize_workbook"
 '   value: [{id, name, abbr}] (list of department dictionary)
 ' evaluation_item_dict
 '   key: evaluation item name
-'   value: {id, format, sort, summarize}
+'   value: {id, format, sortBy, summarize}
 '       id: String
 '       format: "整數數值" | "數值" | "百分比"
-'       sort: "遞增" | "遞減"
+'       sortBy: "遞增" | "遞減"
 '       summarize: "均值" | "加總"
 
 
@@ -24,7 +24,7 @@ Sub initialize_all_workbooks()
     Dim sht As Worksheet
     Dim year As Integer
     Dim worksheet_name As String
-    Dim college_number As Integer
+    Dim department_number As Integer
     
     ' Create the dictionary of college and evaluation item by "B 參數.xlsx"
     Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
@@ -40,10 +40,10 @@ Sub initialize_all_workbooks()
     ThisWorkbook.worksheets("template").Range("F1").Value = year-2 & "年"
 
     ' Create the workbooks by college names
-    Call create_workbooks_by_college_names(college_department_dict.keys, ThisWorkbook.path & "/1. 各院彙整資料/")
+    Call create_workbooks_by_college_names(college_department_dict.keys)
 
     For Each college In college_department_dict.keys
-        Set wb = Workbooks.Open(ThisWorkbook.path & "/1. 各院彙整資料/" & college & ".xlsx")
+        Set wb = Workbooks.Open(path_dir1(college))
         Call initialize_summary_worksheet(wb, college_department_dict(college), evaluation_item_dict)
         
         ' Initialize the worksheets by evaluation items
@@ -52,13 +52,10 @@ Sub initialize_all_workbooks()
             worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
             Call initialize_worksheet(wb, worksheet_name, thisworkbook.worksheets("template"))
 
-            college_number = college_department_dict(college).count - 1
-            If college = "政治大學" Then
-                college_number = college_number - 1
-            End If
+            department_number = college_department_dict(college).count - 1 ' First department is the college itself
 
-            ' Insert new rows by the number of departments
-            Call insert_new_rows(wb, worksheet_name, college_number)
+            ' Insert new rows by the number of departments - 1
+            Call insert_new_rows(wb, worksheet_name, department_number - 1)
 
             ' Set the number format
             Call set_number_format(wb, worksheet_name, evaluation_item_dict(evaluation_item)("format"))
@@ -80,13 +77,13 @@ End Sub
 ' Parameter:
 ' `  college_name_list: the list of college names
 '   target_folder: the folder to store the workbooks
-Function create_workbooks_by_college_names(college_name_list As Variant, target_folder As String)
+Function create_workbooks_by_college_names(college_name_list As Variant)
 
     Dim output_workbook As Workbook
     Dim college_name As Variant
     
     For Each college_name In college_name_list
-        output_workbook_name = target_folder & college_name & ".xlsx"
+        output_workbook_name = path_dir1(college_name)
         
         ' If the output wb already exists, then go to the next college name
         If Dir(output_workbook_name) <> "" Then
@@ -115,7 +112,7 @@ End Sub
 '   wb: the target workbook
 '   worksheet_name: the name of the worksheet to be created
 '   worksheet_template: the template worksheet
-Function initialize_worksheet(wb As Workbook, worksheet_name As Variant, worksheet_template As Worksheet)
+Function initialize_worksheet(wb As Workbook, ByVal worksheet_name As String, worksheet_template As Worksheet)
 
     Dim sht As Worksheet
         
@@ -158,7 +155,7 @@ End Sub
 ' Parameter:
 '   wb: the target workbook
 '   worksheet_name: the name of the worksheet to be tested
-Function worksheet_exists(wb As Workbook, worksheet_name As Variant) As Boolean
+Function worksheet_exists(wb As Workbook, ByVal worksheet_name As String) As Boolean
     Dim sht As Worksheet
     
     worksheet_exists = False
@@ -200,7 +197,7 @@ End Function
 '   wb: the workbook to be modified
 '   worksheet_name: the name of the worksheet to be modified
 '   number_of_departments: the number of departments
-Function insert_new_rows(wb As Workbook, worksheet_name As String, number_of_departments As Integer)
+Function insert_new_rows(wb As Workbook, ByVal worksheet_name As String, ByVal number_of_departments As Integer)
     Dim sht As Worksheet
     Dim last_row As Integer
     
@@ -217,35 +214,6 @@ Private Sub test_insert_new_rows()
     Call insert_new_rows(wb, "test1", 3)
 End Sub
 
-' * Add formula of rank.eq to the worksheet
-' The formula is the rank of column C
-' Write the formula to the column G
-' The first row of the formula is row 3
-' The last row of the formula is the last row of the worksheet
-' The function should consider the situation of empty cell
-' If the cell in column C is empty, then the formula should return "—"
-' Parameter:
-'   wb: the workbook to be modified
-'   worksheet_name: the name of the worksheet to be modified
-'   ascending: the order of the rank
-' Function add_rank_eq_formula(wb As Workbook, worksheet_name As Variant, ascending As Boolean)
-'     Dim sht As Worksheet
-'     Dim last_row As Integer
-    
-'     Set sht = wb.Worksheets(worksheet_name)
-'     last_row = sht.Cells(sht.Rows.Count, 3).End(xlUp).Row
-    
-'     sht.Range("G3:G" & last_row).Formula = "=IF(C3="""",""—"",RANK.EQ(C3,$C$3:$C$" & last_row & ", " & ascending & "))"
-' End Function
-
-' Private Sub test_add_rank_eq_formula()
-'     Dim wb As Workbook
-    
-'     Set wb = ThisWorkbook
-    
-'     Call add_rank_eq_formula(wb, "test1", True)
-' End Sub
-
 ' * Set number format of the cells
 ' The range of the cells is from column C to column F
 ' The first row of the range is row 2
@@ -255,7 +223,7 @@ End Sub
 '   worksheet_name: the name of the worksheet to be modified
 '   number_format: the number format of the cells, the option is "整數數值", "數值" and "百分比"
 ' * When the cells are empty, the number format should be "—"
-Function set_number_format(wb As Workbook, worksheet_name As Variant, number_format As Variant)
+Function set_number_format(wb As Workbook, ByVal worksheet_name As String, ByVal number_format As String)
     Dim sht As Worksheet
     Dim last_row As Integer
     Dim rng As Range
@@ -294,7 +262,7 @@ End Sub
 '   worksheet_name: the name of the worksheet to be modified
 '   department_list: the list of the department information, the format is {id, name, abbr}
 '   summarize: the option is "加總" or "均值"
-Function write_department_names(wb As Workbook, worksheet_name As String, department_list As Collection, summarize As Variant)
+Function write_department_names(wb As Workbook, ByVal worksheet_name As String, department_list As Collection, ByVal summarize As String)
     Dim id As String
     Dim name As String
     Dim abbr As String
@@ -313,9 +281,10 @@ Function write_department_names(wb As Workbook, worksheet_name As String, depart
 
     r = 3
     ' write row 3 to the last row
-    ' skip the row of 政治大學
+    ' skip the first department
+    ' because the first department is the college
     For Each department In department_list
-        If department("name") = "政治大學" Then
+        If department("name") = department_list(1)("name") Then
             GoTo NextDepartment
         End If
         sht.Cells(r, 1) = department("id") & " " & department("name")
@@ -346,7 +315,7 @@ End Sub
 ' Parameter:
 '   wb: the workbook to be modified
 '   college_list: the list of the college information, the format is {id, name, abbr}
-'   evaluation_item_dict: the dictionary of the evaluation item, the format is {name: {id, format, sort, summarize}}
+'   evaluation_item_dict: the dictionary of the evaluation item, the format is {name: {id, format, sortBy, summarize}}
 Function initialize_summary_worksheet(wb As workbook, college_list As Collection, evaluation_item_dict As Scripting.Dictionary)
     
     If Not worksheet_exists(wb, "小結") Then
