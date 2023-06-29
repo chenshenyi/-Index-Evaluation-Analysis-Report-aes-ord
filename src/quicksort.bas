@@ -38,6 +38,7 @@ Sub swap(list, ByVal a As Integer, ByVal b As Integer)
     list(b) = temp
 End Sub
 
+' Passed test
 Sub test_quickSort()
 
     Dim list() As Variant

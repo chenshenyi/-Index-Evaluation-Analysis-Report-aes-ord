@@ -15,7 +15,7 @@ End Function
 
 ' Passed test
 Private Sub test_print_to_file()
-    print_to_file ThisWorkbook.Path & "\output\HelloWorld.txt", "Hello World!"
+    print_to_file ThisWorkbook.Path & "\output\print_to_file.txt", "Hello World!"
 End Sub
 
 

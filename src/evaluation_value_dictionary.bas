@@ -145,7 +145,7 @@ Function evaluation_value_dict_init(ws As Worksheet, ByVal summarize As String) 
     Set evaluation_value_dict_init = evaluation_value_dict
 End Function
 
-' passed test
+' Passed test
 Private Sub test_evaluation_value_dict()
     Dim wb As Workbook
     Dim ws As worksheet
@@ -180,7 +180,7 @@ Function department_value_dict_init(ws As Worksheet, ByVal row As Integer, ByVal
     Set department_value_dict_init = department_value_dict
 End Function
 
-' passed test
+' Passed test
 Private Sub test_department_value_dict_init()
     Dim wb As Workbook
     Dim ws As worksheet
@@ -225,7 +225,7 @@ Function reformulate_value(ByVal value As String, ByVal summarize As String) As 
     reformulate_value = value
 End Function
 
-' passed test
+' Passed test
 Private Sub test_reformulate_value()
     Debug.Print reformulate_value("345.00 /8.82%", "¥[Á`")
     Debug.Print reformulate_value("345.00 /8.82%", "§¡­È")
@@ -360,7 +360,7 @@ Function rank_eq(value_list As Collection, ByVal v As Double, ByVal sortBy As St
     rank_eq = rank +1
 End Function
 
-' passed test
+' Passed test
 Private Sub test_rank_eq()
     Dim sorted_list As Collection
     Set sorted_list = New Collection

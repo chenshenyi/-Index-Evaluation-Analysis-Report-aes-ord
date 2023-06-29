@@ -2,6 +2,7 @@ Attribute VB_Name = "import_data"
 
 ' Passed all test
 
+' TODO: add filter to each worksheet
 
 ' * Import data from "0. 原始資料" to "1. 各院彙整資料"
 Function import_data(college_list As Collection, evaluation_item_list As Collection)
