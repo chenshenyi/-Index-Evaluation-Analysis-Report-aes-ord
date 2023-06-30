@@ -1,7 +1,5 @@
 {
     "files.encoding": "big5hkscs",
-    "vbecm.vbsEncode": "Big5-HKSCS",
-    "chineseColors.jp": true,
     "better-comments.tags": [
 
 
@@ -106,5 +104,4 @@
         }
 
     ],
-
 }

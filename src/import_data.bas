@@ -4,6 +4,9 @@ Attribute VB_Name = "import_data"
 
 ' TODO: add filter to each worksheet
 
+
+' ================================================= import data ==================
+
 ' * Import data from "0. 原始資料" to "1. 各院彙整資料"
 Function import_data(college_list As Collection, evaluation_item_list As Collection)
     Application.DisplayAlerts = False
@@ -45,6 +48,7 @@ Private Sub test_import_data()
 
     import_data college_list, evaluation_item_list
 End Sub
+
 
 ' * Import data
 ' Parameter:
@@ -159,3 +163,6 @@ Private Sub test_import_data_to_ws()
     
     import_data_to_ws ws, college_value_dict
 End Sub
+
+
+' =============================================== Filter =====================================================

@@ -1,12 +1,16 @@
 {
     "recommendations": [
-        "aaron-bond.better-comments",
-        "janisdd.vscode-edit-csv",
-        "github.copilot",
-        "github.vscode-pull-request-github",
-        "gerrnperl.outline-map",
-        "christian-kohler.path-intellisense",
+        "toramameseven.vba-mini-tool",
+        "virochenko.vba-fullcodesnippets",
+        "richie5um2.vscode-sort-json",
         "mechatroner.rainbow-csv",
-        "grapecity.gc-excelviewer"
+        "christian-kohler.path-intellisense",
+        "davidanson.vscode-markdownlint",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "grapecity.gc-excelviewer",
+        "janisdd.vscode-edit-csv",
+        "aaron-bond.better-comments",
+        "bierner.markdown-preview-github-styles"
     ]
 }

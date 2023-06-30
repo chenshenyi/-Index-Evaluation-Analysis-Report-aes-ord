@@ -1,5 +1,8 @@
 Attribute VB_Name = "quick_sort"
 
+' Passed all test
+
+
 Sub quickSort(list, ByVal left As Integer, ByVal right As Integer, Optional sortBy As String = "»¼¼W")
     Dim pivotIndex As Integer
     
