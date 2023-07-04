@@ -26,12 +26,8 @@ Sub initialize_all_workbooks()
     Dim worksheet_name As String
     Dim department_number As Integer
     
-    ' Create the dictionary of college and evaluation item by "B 把计.xlsx"
-    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = college_department_dict_init(argument_wb)
-    Set evaluation_item_dict = evaluation_item_dict_init(argument_wb)
-    argument_wb.Close
-    
+    Call argument_init
+
     year = get_year()
 
     ' Initialize the template worksheet

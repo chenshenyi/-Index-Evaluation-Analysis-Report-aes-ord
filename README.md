@@ -1,15 +1,18 @@
 # Index-Evaluation-Analysis-Report
 
-## ÀÉ®×¤U¸ü
+## ç‰ˆæœ¬è³‡è¨Š
 
-- [ªÅ¥Õ±M®×¤U¸ü](https://downgit.github.io/#/home?url=https://github.com/chenshenyi/Index-Evaluation-Analysis-Report/tree/vbs-project/%E6%8C%87%E6%A8%99%E5%A0%B1%E5%91%8A%E6%9B%B8%E8%87%AA%E5%8B%95%E5%8C%96%E7%A8%8B%E5%BC%8F)
-*ª`·N¡G¦¹³sµ²¥i¯à¥X²{Äµ§i¡A¦ı¥i¥H©ñ¤ßÄ~Äò¤U¸ü*
-- [¤U¸ü§ó·sÀÉ](/src/)
-¶i¦æ¤¤ªº±M®×¡A½Ğ¤U¸ü§ó·sÀÉ¡A¨Ã±NÀÉ®×ÂĞ»\¦Ü­ì±M®×¤¤`A ¥Dµ{¦¡.xlsm`ÀÉ®×
+- Version: 0.0.1
+- Last Update: 2023.06.30
 
-## ±M®×»¡©ú
+## æª”æ¡ˆä¸‹è¼‰
 
-¥»±M®×¦³¨â­Ó¥D­n¥\¯à¡G
+- [ç©ºç™½å°ˆæ¡ˆä¸‹è¼‰](https://downgit.github.io/#/home?url=https://github.com/chenshenyi/Index-Evaluation-Analysis-Report/tree/vbs-project/%E6%8C%87%E6%A8%99%E5%A0%B1%E5%91%8A%E6%9B%B8%E8%87%AA%E5%8B%95%E5%8C%96%E7%A8%8B%E5%BC%8F)
+*æ³¨æ„ï¼šæ­¤é€£çµå¯èƒ½å‡ºç¾è­¦å‘Šï¼Œä½†å¯ä»¥æ”¾å¿ƒç¹¼çºŒä¸‹è¼‰*
+- [ä¸‹è¼‰æ›´æ–°æª”](/src/)
+é€²è¡Œä¸­çš„å°ˆæ¡ˆï¼Œè«‹ä¸‹è¼‰æ›´æ–°æª”ï¼Œä¸¦å°‡æª”æ¡ˆè¦†è“‹è‡³åŸå°ˆæ¡ˆä¸­`A ä¸»ç¨‹å¼.xlsm`æª”æ¡ˆ
 
-1. ·J¾ã­ì©l¸ê®Æ¨Ã¥Í¦¨¹Ïªí
-2. ±N¶×¤J«ü¼Ğ³ø§i®Ñ
+## å°ˆæ¡ˆèªªæ˜
+
+- ç¨‹å¼ç›¸é—œäººå“¡è«‹åƒé–±[ç¨‹å¼èªªæ˜](/src/README.md)
+- æŒ‡æ¨™å·¥å…·èªªæ˜è«‹åƒé–±[æ“ä½œæ‰‹å†Š](/æŒ‡æ¨™å ±å‘Šæ›¸è‡ªå‹•åŒ–ç¯„ä¾‹æª”æ¡ˆ/æŒ‡æ¨™å·¥å…·èªªæ˜.docx)

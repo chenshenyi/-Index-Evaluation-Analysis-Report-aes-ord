@@ -14,7 +14,7 @@ Attribute VB_Name = "college_department_dictionary"
 '   Column C: Department name
 '   Column D: Department abbreviation
 
-Function college_department_dict_init(wb As Workbook) As Scripting.Dictionary
+Function college_department_dict_init(argument_wb As Workbook) As Scripting.Dictionary
     
     Dim college_department_dict As Scripting.Dictionary
     Dim college_name As Variant
@@ -23,7 +23,7 @@ Function college_department_dict_init(wb As Workbook) As Scripting.Dictionary
     Dim department_dict As Scripting.Dictionary
     
     Set college_department_dict = New Scripting.Dictionary
-    set ws = wb.Worksheets("╰")
+    set ws = argument_wb.Worksheets("╰")
     last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
 
     For i = 2 To last_row
@@ -58,11 +58,11 @@ Private Sub test_create_college_department_dict()
     Dim department_list As Variant
     Dim department As Variant
     Dim department_dict As Scripting.Dictionary
-    Dim wb As Workbook
+    Dim argument_wb As Workbook
 
-    Set wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
-    Set college_department_dict = college_department_dict_init(wb)
-    wb.Close
+    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 把计.xlsx")
+    Set college_department_dict = college_department_dict_init(argument_wb)
+    argument_wb.Close
 
     Dim file_path As String
     file_path = ThisWorkbook.path & "/output/college_department_dict.json"

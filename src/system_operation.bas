@@ -4,7 +4,7 @@ Attribute VB_Name = "system_operation"
 
 ' ============================================= Copy =============================================
 
-Function copy_file(from_path As String, to_path As String)
+Function copy_file(ByVal from_path As String, ByVal to_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.CopyFile from_path, to_path
@@ -16,7 +16,7 @@ Private Sub test_copy_file()
 End Sub
 
 
-Function copy_folder(from_path As String, to_path As String)
+Function copy_folder(ByVal from_path As String, ByVal to_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.CopyFolder from_path, to_path
@@ -30,7 +30,7 @@ End Sub
 
 ' ============================================= Create =============================================
 
-Function create_folder(folder_path As String)
+Function create_folder(ByVal folder_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.CreateFolder folder_path
@@ -42,7 +42,7 @@ Private Sub test_create_folder()
 End Sub
 
 
-Function create_file(file_path As String)
+Function create_file(ByVal file_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.CreateTextFile file_path
@@ -56,7 +56,7 @@ End Sub
 
 ' ============================================= Delete =============================================
 
-Function delete_file(file_path As String)
+Function delete_file(ByVal file_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.DeleteFile file_path
@@ -69,7 +69,7 @@ Private Sub test_delete_file()
 End Sub
 
 
-Function delete_folder(folder_path As String)
+Function delete_folder(ByVal folder_path As String)
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")
     fso.DeleteFolder folder_path

@@ -29,7 +29,7 @@ Attribute VB_Name = "evaluation_value_dictionary"
 ' Parameter:
 '   argument_wb: the workbook of the argument file 'B 參數.xlsx'
 '   evaluation_item_list: the list of evaluation item names
-Function evaluation_items_value_dict_init(argument_wb As Workbook, evaluation_item_list As Collection) As Scripting.Dictionary
+Function evaluation_items_value_dict_init(evaluation_item_list As Collection) As Scripting.Dictionary
     Dim evaluation_items_value_dict As Scripting.Dictionary
     Dim evaluation_item As Scripting.Dictionary
     Dim id As String
@@ -38,7 +38,7 @@ Function evaluation_items_value_dict_init(argument_wb As Workbook, evaluation_it
     Dim wb As Workbook
     Dim ws As Worksheet
 
-    Set evaluation_items_value_dict = evaluation_item_dict_init(argument_wb)
+    Call argument_init
 
     For Each evaluation_item_name In evaluation_item_list
         Set evaluation_item = evaluation_items_value_dict(evaluation_item_name)
@@ -65,9 +65,6 @@ Private Sub test_evaluation_items_value_dict_init()
     Application.ScreenUpdating = False
     application.DisplayAlerts = False
 
-    Dim argument_wb As Workbook
-    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
-
     Dim evaluation_item_list As Collection
     Set evaluation_item_list = New Collection
     evaluation_item_list.Add "學士班繁星推薦入學錄取率"
@@ -79,7 +76,7 @@ Private Sub test_evaluation_items_value_dict_init()
     ' evaluation_item_list.Add "舉辦國際學術研討會數"
 
     Dim evaluation_items_value_dict As Scripting.Dictionary
-    Set evaluation_items_value_dict = evaluation_items_value_dict_init(argument_wb, evaluation_item_list)
+    Set evaluation_items_value_dict = evaluation_items_value_dict_init(evaluation_item_list)
     
     Dim file_path As String
     file_path = ThisWorkbook.path & "/output/evaluation_items_value_dict1.csv"
@@ -285,11 +282,8 @@ Function college_rank_eq(evaluation_value_dict As Scripting.Dictionary, ByVal co
         Set department_dict = evaluation_value_dict(college_name)(department_name)
         avg = department_dict("avg")
 
-        ' 如果 department_name 前三碼和 college_name 前三碼相同
-        If department_name = college_name Then
+        If Left(department_name, 3) = Left(college_name, 3) Then
             department_dict.Add "rank", 999
-        ElseIf Left(department_name, 3) = Left(college_name, 3) Then
-            department_dict.Add "rank", 998
         ElseIf avg = "-" Then
            department_dict.Add "rank", "-"
         Else
