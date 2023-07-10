@@ -9,7 +9,7 @@ Attribute VB_Name = "evaluation_item_dictionary"
 '       id: String
 '       format: "整數數值" | "數值" | "百分比"
 '       sortBy: "遞增" | "遞減"
-'       summarize: "均值" | "加總"
+'       summarize: "均值" | "加總" 
 
 ' The data is stored in the worksheet "評鑑指標" in "B 參數.xlsx"
 '   First row is the header

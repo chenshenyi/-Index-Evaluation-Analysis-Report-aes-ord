@@ -38,7 +38,10 @@ Function evaluation_items_value_dict_init(evaluation_item_list As Collection) As
     Dim wb As Workbook
     Dim ws As Worksheet
 
-    Call argument_init
+    Dim argument_wb As Workbook
+    Set argument_wb = Workbooks.Open(ThisWorkbook.path & "/B 參數.xlsx")
+    Set evaluation_items_value_dict = evaluation_item_dict_init(argument_wb)
+    argument_wb.Close
 
     For Each evaluation_item_name In evaluation_item_list
         Set evaluation_item = evaluation_items_value_dict(evaluation_item_name)
@@ -199,7 +202,8 @@ End Sub
 '   value: cell value
 '   summarize: "加總" or "均值"
 Function reformulate_value(ByVal value As String, ByVal summarize As String) As String
-    
+    On Error GoTo ErrorHandler
+
     ' 如果有 " /"，則根據 summarize 取出數值
     If InStr(value, " /") Then
         Select Case summarize
@@ -220,6 +224,9 @@ Function reformulate_value(ByVal value As String, ByVal summarize As String) As 
     End If
 
     reformulate_value = value
+ErrorHandler:
+    reformulate_value = "-"
+    Resume Next
 End Function
 
 ' Passed test

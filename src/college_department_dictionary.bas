@@ -5,7 +5,7 @@ Attribute VB_Name = "college_department_dictionary"
 ' college_department_dict
 '   key: college name
 '   value: [department]
-'       department: {id, name, abbr}
+'       department: {id, name, abbr, fullname}
 
 ' The data is stored in the worksheet "科系列表" in "B 參數.xlsx"
 '   First row is the header
@@ -13,6 +13,7 @@ Attribute VB_Name = "college_department_dictionary"
 '   Column B: Department id
 '   Column C: Department name
 '   Column D: Department abbreviation
+'   Column E: Department full name
 
 Function college_department_dict_init(argument_wb As Workbook) As Scripting.Dictionary
     
@@ -31,6 +32,7 @@ Function college_department_dict_init(argument_wb As Workbook) As Scripting.Dict
         department_id = ws.Cells(i, 2).Value
         department_name = ws.Cells(i, 3).Value
         department_abbr = ws.Cells(i, 4).Value
+        department_fullname = ws.Cells(i, 5).Value
         
         ' If the college name is not in the dictionary, then add the college name to the dictionary
         If Not college_department_dict.Exists(college_name) Then
@@ -42,6 +44,7 @@ Function college_department_dict_init(argument_wb As Workbook) As Scripting.Dict
         department_dict.Add "id", department_id
         department_dict.Add "name", department_name
         department_dict.Add "abbr", department_abbr
+        department_dict.Add "fullname", department_fullname
         
         college_department_dict(college_name).Add department_dict
     Next i

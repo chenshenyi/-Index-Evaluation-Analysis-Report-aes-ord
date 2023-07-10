@@ -1,5 +1,8 @@
 {
-    "files.encoding": "big5hkscs",
+    "[vb]":{
+        "files.encoding": "cp950"
+    },
+    "editor.fontSize": 16,
     "better-comments.tags": [
 
 
@@ -104,4 +107,5 @@
         }
 
     ],
+    
 }

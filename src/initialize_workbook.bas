@@ -1,32 +1,23 @@
 Attribute VB_Name = "initialize_workbook"
 
-' This module use the following dictionary:
-' college_department_dict
-'   key: college name
-'   value: [{id, name, abbr}] (list of department dictionary)
-' evaluation_item_dict
-'   key: evaluation item name
-'   value: {id, format, sortBy, summarize}
-'       id: String
-'       format: "整數數值" | "數值" | "百分比"
-'       sortBy: "遞增" | "遞減"
-'       summarize: "均值" | "加總"
+' title: initialize_workbook.bas
+' date: 2023-07-10 11:33:15
 
+
+' Passed all tests
 
 Sub initialize_all_workbooks()
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
 
     Dim argument_wb As Workbook
-    Dim college_department_dict As Scripting.Dictionary
-    Dim evaluation_item_dict As Scripting.Dictionary
     Dim wb As Workbook
     Dim sht As Worksheet
     Dim year As Integer
     Dim worksheet_name As String
     Dim department_number As Integer
     
-    Call argument_init
+    argument_init
 
     year = get_year()
 
@@ -35,15 +26,17 @@ Sub initialize_all_workbooks()
     ThisWorkbook.worksheets("template").Range("E1").Value = year-1 & "年"
     ThisWorkbook.worksheets("template").Range("F1").Value = year-2 & "年"
 
+    
     ' Create the workbooks by college names
-    Call create_workbooks_by_college_names(college_department_dict.keys)
+    create_workbooks_by_college_names college_department_dict.Keys
 
-    For Each college In college_department_dict.keys
+
+    For Each college In college_department_dict.Keys
         Set wb = Workbooks.Open(college_excel_path(college))
-        Call initialize_summary_worksheet(wb, college_department_dict(college), evaluation_item_dict)
+        Call initialize_summary_worksheet(wb, college_department_dict(college))
         
         ' Initialize the worksheets by evaluation items
-        For Each evaluation_item In evaluation_item_dict.keys
+        For Each evaluation_item In evaluation_item_dict.Keys
 
             worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
             Call initialize_worksheet(wb, worksheet_name, thisworkbook.worksheets("template"))
@@ -128,6 +121,7 @@ Function initialize_worksheet(wb As Workbook, ByVal worksheet_name As String, wo
 End Function
 
 Private Sub test_initialize_worksheets()
+    Application.ScreenUpdating = False
     Application.DisplayAlerts = False
 
     Dim workbook_names As Variant
@@ -147,6 +141,7 @@ Private Sub test_initialize_worksheets()
     Next workbook_name
 
     Application.DisplayAlerts = True
+    Application.ScreenUpdating = True
 End Sub
 
 ' * Test if the worksheet exists in the workbook
@@ -319,9 +314,8 @@ End Sub
 ' The first column is the name of the evaluation items
 ' Parameter:
 '   wb: the workbook to be modified
-'   college_list: the list of the college information, the format is {id, name, abbr}
-'   evaluation_item_dict: the dictionary of the evaluation item, the format is {name: {id, format, sortBy, summarize}}
-Function initialize_summary_worksheet(wb As workbook, college_list As Collection, evaluation_item_dict As Scripting.Dictionary)
+'   departments: the list of the department information, the format is {id, name, abbr, fullname}
+Function initialize_summary_worksheet(wb As workbook, departments As Collection)
     
     If Not worksheet_exists(wb, "小結") Then
         wb.Worksheets("工作表1").name = "小結"
@@ -329,23 +323,30 @@ Function initialize_summary_worksheet(wb As workbook, college_list As Collection
         wb.Worksheets("小結").Cells.Clear
     End If
 
-    c = 1
-    For Each college In college_list
-        wb.Worksheets("小結").Cells(1, c) = college("abbr")
-        c = c + 1
-    Next college
+    argument_init
 
-    r = 2
+    c = 2
+    For Each department In departments
+        wb.Worksheets("小結").Cells(1, c) = department("fullname")
+        wb.Worksheets("小結").Cells(2, c) = department("abbr")
+        ' set the column width
+        wb.Worksheets("小結").Columns(c).ColumnWidth = 7
+        c = c + 1
+    Next department
+
+    r = 3
     For Each evaluation_item In evaluation_item_dict.keys
         worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
         address = "'" & worksheet_name & "'" & "!A1"
         ' add an navigation link to the worksheet
-        wb.Worksheets("小結").Hyperlinks.Add Anchor:=wb.Worksheets("小結").Cells(r, 1), Address:="", SubAddress:= address, TextToDisplay:=worksheet_name
+        wb.Worksheets("小結").Cells(r, 1) = evaluation_item_dict(evaluation_item)("id")
+        wb.Worksheets("小結").Hyperlinks.Add Anchor:=wb.Worksheets("小結").Cells(r, 2), Address:="", SubAddress:= address, TextToDisplay:= evaluation_item
         r = r + 1
     Next evaluation_item
 
-    ' auto fit the width of the collumn
-    wb.Worksheets("小結").Columns.AutoFit
+    ' auto fit the width of the first 2 column
+    wb.Worksheets("小結").Columns(1).AutoFit
+    wb.Worksheets("小結").Columns(2).AutoFit
 
     ' Set the font to "標楷體"
     wb.Worksheets("小結").Cells.Font.Name = "標楷體"
