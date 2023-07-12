@@ -26,7 +26,6 @@ Index-Evaluation-Analysis-Report
 
 - docs
 - src
-  - git-export-import-vba (引用自 [henriquebcustodio](https://github.com/henriquebcustodio/git-export-import-vba))
   - *專案程式碼寫在此處*
 - test
   - 0 原始資料

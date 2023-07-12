@@ -1,27 +1,25 @@
-# �����ɻ���
+# 測試檔說明
 
-## ��Ƨ����c
+## 資料夾結構
 
-�����ɮפ�����j���A�@�����O�|�X�{�b�����M�פ�����ơA�]�A�G
+測試檔案分成兩大類，一部分是會出現在正式專案中的資料，包括：
 
-- 0.��l���
-- 1.�U�|�J����
-- 2.�U�|���i�ѼҪO
-- 3.�U�|���i��
-- A �D�{��.xlsm
-- B �Ѽ�.xlsx
+- 0.原始資料
+- 1.各院彙整資料
+- 2.各院報告書模板
+- 3.各院報告書
+- A 主程式.xlsm
+- B 參數.xlsx
 
-�t�@�����O���ձM�Ϊ���ơA�ھڴ��ժ���ƩR�W�A�]�A�G
+另一部份是測試專用的資料，根據測試的函數命名，包括：
 
-- input: �w�]��J��ơA�� `git` �޲z�A�Ҧ����վާ@�������惡��Ƨ����e
-- output: ��X��ơA���� `git` �޲z�A�ק��ɮת���ƴ��աA�����q `input` ��Ƨ�Ū���νƻs�A�ñN���G�g�J `output` ��Ƨ�
+- input: 預設輸入資料，受 `git` 管理，所有測試操作都不能更改此資料夾內容
+- output: 輸出資料，不受 `git` 管理，修改檔案的函數測試，皆應從 `input` 資料夾讀取或複製，並將結果寫入 `output` 資料夾
 
-## �פJ�Ҳ�(module)
+## 匯入模組(module)
 
-�Ҧ��{���X���g�b `A. �D�{��.xlsm` ���A�]�� `VBA` �O�@�إj�Ѫ��y���A�ҥH�פJ�Ҳժ��覡�]�ܥj�ѡA���B�ϥΥ� [henriquebcustodio](https://github.com/henriquebcustodio) �}�o������C
+所有程式碼都寫在 `A. 主程式.xlsm` 中，因為 `VBA` 是一種古老的語言，所以匯入模組的方式也很古老，有一個方便的小程序可以幫助我們匯入模組，請參考 [import_modules.bas](../src/import_modules.bas)。
 
-�b `A. �D�{��.xlsm` �� `����(User Form)` ����� `gitExportImport`�A�I���᪽������(F5)�A�Բӻ����аѦ� [VBA-Import-Export](https://github.com/henriquebcustodio/git-export-import-vba)�C
+## 發布正式版
 
-## �o��������
-
-�N��Ƨ��� `A. �D�{��.xlsm` ���O�ƻs�� `���г��i�Ѧ۰ʤƽd���ɮ�` �P `�s�M��` ���Y�i�C
+將資料夾中 `A. 主程式.xlsm` 分別複製到 `指標報告書自動化範例檔案` 與 `新專案` 中即可。

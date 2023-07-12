@@ -81,5 +81,13 @@
             "",
             "End Sub"
         ]
-    }
+    },
+    "New Line":{
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "\\n",
+        "body": [
+            "vbNewLine & _",
+            "$1"
+        ]
+    },
 }

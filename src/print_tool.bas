@@ -214,3 +214,19 @@ Private Sub test_csv_expand_last_str()
 
 End Sub
 
+' ================================= join =================================
+
+Function join_collection(coll As Collection, _
+                        Optional delimiter As String = ",", _
+                        Optional ByVal prefix As String = "", _
+                        Optional ByVal suffix As String = "") As String
+
+    Dim result As String
+    Dim i As Integer
+    result = prefix & coll(1) & suffix
+    For i = 2 To coll.Count
+        result = result & delimiter & prefix & coll(i) & suffix
+    Next i
+    join_collection = result
+
+End Function
