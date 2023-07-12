@@ -1,11 +1,8 @@
 Attribute VB_Name = "initialize_workbook"
-
-' title: initialize_workbook.bas
-' date: 2023-07-10 11:33:15
+' 2023-07-11 17:15:38
 
 
 ' Passed all tests
-
 Sub initialize_all_workbooks()
     Application.DisplayAlerts = False
     Application.ScreenUpdating = False
@@ -45,9 +42,6 @@ Sub initialize_all_workbooks()
 
             ' Insert new rows by the number of departments - 1
             Call insert_new_rows(wb, worksheet_name, department_number - 1)
-
-            ' Set the number format
-            Call set_number_format(wb, worksheet_name, evaluation_item_dict(evaluation_item)("format"))
 
             ' Write the department names
             Call write_department_names(wb, worksheet_name, college_department_dict(college), evaluation_item_dict(evaluation_item)("summarize"))
@@ -217,33 +211,6 @@ End Sub
 '   wb: the workbook to be modified
 '   worksheet_name: the name of the worksheet to be modified
 '   number_format: the number format of the cells, the option is "整數數值", "數值" and "百分比"
-' * When the cells are empty, the number format should be "—"
-Function set_number_format(wb As Workbook, ByVal worksheet_name As String, ByVal number_format As String)
-    Dim sht As Worksheet
-    Dim last_row As Integer
-    Dim rng As Range
-
-    Set sht = wb.Worksheets(worksheet_name)
-    last_row = sht.Cells(sht.Rows.Count, 3).End(xlUp).Row
-    Set rng = sht.Range("C2:F" & last_row)
-   
-    Select Case number_format
-        Case "整數數值"
-            rng.NumberFormat = "#,##0;""—"";""—"""
-        Case "數值"
-            rng.NumberFormat = "#,##0.00;""—"";""—"""
-        Case "百分比"
-            rng.NumberFormat = "0.00%;""—"";""—"""
-    End Select
-End Function
-
-Private Sub test_set_number_format()
-    Dim wb As Workbook
-    
-    Set wb = ThisWorkbook
-    
-    Call set_number_format(wb, "test1", "整數數值")
-End Sub
 
 ' * Write the department information to worksheet
 ' In the row 2:
@@ -335,7 +302,17 @@ Function initialize_summary_worksheet(wb As workbook, departments As Collection)
     Next department
 
     r = 3
+    privious_group = -1
+    current_group = -1
     For Each evaluation_item In evaluation_item_dict.keys
+        current_group = evaluation_item_dict(evaluation_item)("group")
+        If current_group <> privious_group And privious_group <> -1 Then
+            wb.Worksheets("小結").Cells(r, 1) = "平均"
+            wb.Worksheets("小結").Cells(r, 2) = "平均 " & privious_group
+            r = r + 1
+        End If
+        privious_group = current_group
+
         worksheet_name = evaluation_item_dict(evaluation_item)("id") & " " & evaluation_item
         address = "'" & worksheet_name & "'" & "!A1"
         ' add an navigation link to the worksheet
@@ -343,6 +320,10 @@ Function initialize_summary_worksheet(wb As workbook, departments As Collection)
         wb.Worksheets("小結").Hyperlinks.Add Anchor:=wb.Worksheets("小結").Cells(r, 2), Address:="", SubAddress:= address, TextToDisplay:= evaluation_item
         r = r + 1
     Next evaluation_item
+
+    wb.Worksheets("小結").Cells(r, 1) = "平均"
+    wb.Worksheets("小結").Cells(r, 2) = "小結 " & current_group
+
 
     ' auto fit the width of the first 2 column
     wb.Worksheets("小結").Columns(1).AutoFit

@@ -1,11 +1,11 @@
 Attribute VB_Name = "init_dicts"
+' 2023-07-10 11:59:55
+
 
 Global college_department_dict As Scripting.Dictionary
 Global evaluation_item_dict As Scripting.Dictionary
 
 Function argument_init()
-    Application.ScreenUpdating = False
-    Application.DisplayAlerts = False
 
     Dim argument_wb As Workbook
     If college_department_dict Is Nothing Then
@@ -20,6 +20,4 @@ Function argument_init()
         argument_wb.Close False
     End If
 
-    Application.ScreenUpdating = True
-    Application.DisplayAlerts = True
 End Function

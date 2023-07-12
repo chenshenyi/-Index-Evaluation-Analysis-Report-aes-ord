@@ -1,0 +1,85 @@
+{
+    // Place your 3. Index-Evaluation-Analysis-Report workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+    // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+    // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+    // used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+    // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+    // Placeholders with the same ids are connected.
+    // Example:
+    // "Print to console": {
+    //  "scope": "javascript,typescript",
+    //  "prefix": "log",
+    //  "body": [
+    //      "console.log('$1');",
+    //      "$2"
+    //  ],
+    //  "description": "Log output to console"
+    // }
+    "test sub": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "test",
+        "body": [
+            "",
+            "Private Sub test_$1()",
+            "",
+            "$2",
+            "",
+            "End Sub",
+            ""
+        ],
+    },
+    "no update": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "update turn off",
+        "body": [
+            "Application.ScreenUpdating = False",
+            "Application.DisplayAlerts = False",
+            "",
+            "Application.ScreenUpdating = True",
+            "Application.DisplayAlerts = True"
+        ],
+    },
+    "Header": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "header(vba)",
+        "body": [
+            "Attribute VB_Name = \"$TM_FILENAME_BASE\"",
+            "$LINE_COMMENT $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+        ]
+    },
+    "On Error Goto Handler": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "on error goto handler",
+        "body": [
+            "On Error GoTo ErrorHandler",
+            "",
+            "Exit $1",
+            "",
+            "ErrorHandler:",
+            "MsgBox \"Error: \" & $2"
+        ]
+    },
+    "Function": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "function",
+        "body": [
+            "Function $1($2)",
+            "",
+            "$3",
+            "",
+            "End Function",
+            "",
+        ]
+    },
+    "Sub": {
+        "scope": "vba, vb, bas, cls, frm",
+        "prefix": "sub",
+        "body": [
+            "Sub $1()",
+            "",
+            "$2",
+            "",
+            "End Sub"
+        ]
+    }
+}

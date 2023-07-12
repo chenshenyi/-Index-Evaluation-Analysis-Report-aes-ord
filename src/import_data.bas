@@ -1,5 +1,5 @@
 Attribute VB_Name = "import_data"
-
+' 2023-07-10 12:00:08
 
 
 ' Passed all test
@@ -36,7 +36,9 @@ End Sub
 
 ' * Import data from "0. 原始資料" to "1. 各院彙整資料"
 Function import_data(college_list As Collection, evaluation_item_list As Collection)
-
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+        
     Dim argument_wb As Workbook
     Dim destin_wb As Workbook
 
@@ -45,13 +47,20 @@ Function import_data(college_list As Collection, evaluation_item_list As Collect
     For Each college In college_list
         Set destin_wb = Workbooks.Open(college_excel_path(college))
         import_data_to_wb destin_wb, college, evaluation_item_list
+        write_summary_table destin_wb, college
         destin_wb.Close True
     Next college
 
+        
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
 End Function
 
 ' Passed test
 Private Sub test_import_data()
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
+    
     argument_init
 
     Dim college_list As Collection
@@ -67,6 +76,9 @@ Private Sub test_import_data()
     evaluation_item_list.Add "學士班獲獎助學金平均金額"
 
     import_data college_list, evaluation_item_list
+
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
 End Sub
 
 
@@ -100,17 +112,14 @@ Function import_data_to_wb( wb as Workbook, _
         Set ws = wb.Worksheets(shtname)
 
         ' 將資料匯入到工作表
-        import_data_to_ws ws, college_value_dict
-
-        ' 套用篩選器
-        filter_ws ws
+        import_data_to_ws ws, college_value_dict, evaluation_item_dict("format")
 
         ' 生成分析文字
-        generate_analytic_text ws, college, evaluation_item
-        
+        generate_analytic_text ws, college, evaluation_item        
     Next evaluation_item
     
 End Function
+
 
 ' Passed test
 Private Sub test_import_data_to_wb()
@@ -122,14 +131,17 @@ Private Sub test_import_data_to_wb()
     
     argument_init
 
-    Dim evaluation_items_value_dict As Scripting.Dictionary
     Set evaluation_items_value_dict = evaluation_items_value_dict_init(evaluation_item_list)
 
-        Dim wb As Workbook
+    from_path = ThisWorkbook.path & "\1. 各院彙整資料\理學院.xlsx"
+    to_path = ThisWorkbook.path & "\output\import_data_to_wb.xlsx"
+    copy_file from_path, to_path
+
+    Dim wb As Workbook
     Dim ws As Worksheet
-    Set wb = Workbooks.Open(ThisWorkbook.path & "\1. 各院彙整資料\理學院.xlsx")
+    Set wb = Workbooks.Open(to_path)
     college = "理學院"
-    import_data_to_wb wb, college, evaluation_item_list, evaluation_items_value_dict
+    import_data_to_wb wb, college, evaluation_item_list
 End Sub
 
 
@@ -145,13 +157,20 @@ End Sub
 '   college_value_dict: the dict of the college's data
 '       key: department_name
 '       value: {avg, year3, year2, year1, rank}
-Function import_data_to_ws(ws as Worksheet, college_value_dict as Scripting.Dictionary)
+'   format: the format of the data
+Function import_data_to_ws(ws as Worksheet, college_value_dict as Scripting.Dictionary, format as String)
+    
     Dim department_name As Variant
     Dim department_value_dict As Scripting.Dictionary
     Dim row As Integer
-    
-    last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+    last_row = college_value_dict.Count + 1
+
     For row = 2 to last_row
+        if ws.Cells(row, 1).Value = "" Then
+            last_row = row - 1
+            Exit For
+        End If
 
         ' 跟據第一欄的學系名稱，取得該學系的資料
         department_name = ws.Cells(row, 1).Value
@@ -164,10 +183,29 @@ Function import_data_to_ws(ws as Worksheet, college_value_dict as Scripting.Dict
         ws.Cells(row, 7).Value = department_value_dict("rank")
 
     Next row
+
+    Dim rng As Range
+    Set rng = ws.Range("C2:F" & last_row)
+
+    ' 自動調整欄寬
+    rng.Columns.AutoFit
+
+    ' 設定格式
+    set_number_format rng, format
+
+    ' 設定圖表 y 軸的數值格式
+    set_axis_number_format ws, format
+
+    Set rng = ws.Range("A2:G" & last_row)
+
+    ' 套用篩選
+    filter_rng rng
 End Function
 
 ' Passed test
 Private Sub test_import_data_to_ws()
+    Application.ScreenUpdating = False
+    Application.DisplayAlerts = False
     
     Dim evaluation_item_list As Collection
     Set evaluation_item_list = New Collection
@@ -179,30 +217,85 @@ Private Sub test_import_data_to_ws()
     Dim college_value_dict As Scripting.Dictionary
     Set college_value_dict = evaluation_items_value_dict("學士班繁星推薦入學錄取率")("evaluation_value_dict")("700 理學院")
 
+    from_path = ThisWorkbook.path & "\1. 各院彙整資料\理學院.xlsx"
+    to_path = ThisWorkbook.path & "\output\import_data_to_ws.xlsx"
+    copy_file from_path, to_path
+
     Dim wb As Workbook
     Dim ws As Worksheet
-    Set wb = Workbooks.Open(ThisWorkbook.path & "\1. 各院彙整資料\理學院.xlsx")
+    Set wb = Workbooks.Open(to_path)
     Set ws = wb.Worksheets("1.1.1.1 學士班繁星推薦入學錄取率")
     
     import_data_to_ws ws, college_value_dict
+    
+    Application.ScreenUpdating = True
+    Application.DisplayAlerts = True
 End Sub
+
+' =============================================== format =====================================================
+
+Function set_number_format(rng As Range, ByVal number_format As String)
+    
+    Select Case number_format
+        Case "整數數值"
+            rng.NumberFormat = "#,##0;-#,###;0"
+        Case "數值"
+            rng.NumberFormat = "#,##0.##;-#,##0.##;0"
+        Case "百分比"
+            rng.NumberFormat = "###.##%;-###.##%;0%"
+    End Select
+
+    For Each c In rng
+        If c.Value = "—" Then
+            c.NumberFormat = """—"""
+        ElseIf right(c.Text, 2) = ".%" Then
+            c.NumberFormat = "###%;###%;0%"
+        ElseIf right(c.Text, 1) = "." Then
+            c.NumberFormat = "#,###;#,###;0"
+        End If
+    Next c
+End Function
+
+Function set_axis_number_format(ws As Worksheet, ByVal number_format As String)
+
+    Set y_axis = ws.ChartObjects(1).Chart.Axes(xlValue)
+    unit = y_axis.MajorUnit
+
+    Select Case number_format
+        Case "整數數值"
+            y_axis.TickLabels.NumberFormat = "#,##0;-#,###;0"
+        Case "數值"
+            If unit < 0.1 Then
+                y_axis.TickLabels.NumberFormat = "0.00;-0.00;0"
+            ElseIf unit<1 Then
+                y_axis.TickLabels.NumberFormat = "0.0;-0.0;0"
+            Else
+                y_axis.TickLabels.NumberFormat = "#,##0;-#,###;0"
+            End If
+        Case "百分比"
+            If unit < 0.001 Then
+                y_axis.TickLabels.NumberFormat = "0.00%;-0.00%;0"
+            ElseIf unit<0.01 Then
+                y_axis.TickLabels.NumberFormat = "0.0%;-0.0%;0"
+            Else
+                y_axis.TickLabels.NumberFormat = "0%;-0%;0"
+            End If
+    End Select
+
+End Function
+
 
 
 ' =============================================== Filter =====================================================
 
 ' * Filter in the worksheet
 ' Filter the data in the worksheet by rank(Col G)
-' Hide the rows which rank = '-' and sort the data by rank
+' Hide the rows which rank = '—' and sort the data by rank
 ' Parameter:
 '   ws: the worksheet to filter
-Function filter_ws(ws as Worksheet)
-    Dim last_row As Integer
-    Dim filter_range As Range
-
-    last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
-    Set filter_range = ws.Range(ws.Cells(2, 1), ws.Cells(last_row, 7))
-    filter_range.AutoFilter Field:=7, Criteria1:="<>-"
-    filter_range.Sort Key1:=ws.Range("G2"), Order1:=xlAscending
+Function filter_rng(rng As Range)
+    rng.Sort Key1:=rng.Range("G1"), Order1:=xlAscending
+    rng.AutoFilter Field:=7, Criteria1:="<>—"
 End Function
 
 ' Passed test
@@ -248,15 +341,19 @@ Function generate_analytic_text(ws As worksheet, ByVal college As String, ByVal 
     ' 測試是否有資料
     n = college_department_dict(college).Count
     empty_count = 0
+    zero_count = 0
     For r = 2 To n+1
         If ws.Cells(r, 1) = "" Then
             Exit For
         End If
-        If ws.Cells(r, 3) = "-" Then
+        If ws.Cells(r, 3) = "—" Then
             empty_count = empty_count + 1
         End If
+        If ws.Cells(r, 3) = 0 Then
+            zero_count = zero_count + 1
+        End If
     Next r
-    If empty_count = n Then
+    If empty_count >= n - 1 Then
         result_range.Value = "無資料。"
         Exit Function
     End If
@@ -265,24 +362,21 @@ Function generate_analytic_text(ws As worksheet, ByVal college As String, ByVal 
 
     ' 根據指標排序方式，得出需列出的系所數量
     If summarize = "加總" Then
+        
         result = ""
-        If college_avg_text = "0" or college_avg_text = "-" Then
-            result =  level & "加總三年均值為" & college_avg_text & "。"
+        If college_avg_text = "0" Then
+            result =  level & "加總三年均值為0。"
             result_range.Value = result
             Exit Function
         End If
         
-        For r = 2 To n - empty_count - 1
+        For r = 2 To n - empty_count - zero_count - 1
             curr_dept = ws.Cells(r, 2)
             curr_str = ws.Cells(r, 3).Text
             next_str = ws.Cells(r+1, 3).Text
-            result = result & curr_dept
-            If curr_str <> next_str Then
-                result = result & curr_str
-            End If
-            result = result & "、"
+            result = result & curr_dept & curr_str & "、"
         Next r
-        r = n - empty_count
+        r = n - empty_count - zero_count
         result = result & ws.Cells(r, 2) & ws.Cells(r, 3).Text & "。"
         
         result = level & "加總三年均值為" & college_avg_text & "，包含" & result
@@ -384,39 +478,60 @@ Private Sub test_generate_analytic_text()
 End Sub
 
 
-' ============================================================= 小節表格 =============================================================
-' TODO: 生成小節表格
+' ============================================================= 小結表格 =============================================================
+' TODO: 生成小結表格
 ' 標題列是指標名稱、標題欄是學系名稱
 ' 各欄的值是該學系的 rank
 ' Parameter:
 '   wb: the workbook to generate summary table
 '   evaluation_items_value_dict: the dict of the evaluation items' data 
-Function write_summary_table(wb As Workbook, college As String)
+Function write_summary_table(wb As Workbook, ByVal college As String)
     ' column 1 is evaluation item id, column 2 is evaluation item name
     ' row 1 is department full name, row 2 is department abbreviation
     ' write the rank of each department in each evaluation item
-    ws_name = "小節表格"
+    ws_name = "小結"
     Dim ws As Worksheet
     Set ws = wb.Sheets(ws_name)
 
     r = 3
-    max_row = ws.Cells(rows.Count, 2).End(xlDown).Row
+    max_row = ws.Cells(2, 2).End(xlDown).Row
 
     c = 3
-    max_column = ws.Cells(2, Columns.Count).End(xlToRight).Column
+    max_column = ws.Cells(2,2).End(xlToRight).Column
 
     college_id = college_department_dict(college)(1)("id")
     college_with_id = college_id & " " & college
 
+
+    start = 3
     For r = 3 To max_row
         evaluation_item = ws.Cells(r, 2).Value
+
+        If ws.Cells(r, 1).Value <> "平均" Then
+            Set department_ranks = evaluation_items_value_dict(evaluation_item)("evaluation_value_dict")(college_with_id)
+        End if
+
         For c = 3 To max_column
-            department = ws.Cells(1, c).Value
-            ws.Cells(r, c).Value = evaluation_items_value_dict(evaluation_item)("evaluation_value_dict")(college_with_id)(department)
+            If ws.Cells(r, 1).Value = "平均" Then
+                On Error GoTo SetAvgDash
+                avg = Application.WorksheetFunction.Average(ws.Range(ws.Cells(start, c), ws.Cells(r-1, c)))
+                avg = Round(avg, 2)
+                ws.Cells(r, c).Value = avg
+                GoTo NoError
+SetAvgDash:
+                ws.Cells(r, c).Value = "-"
+NoError:
+            Else
+                department = ws.Cells(1, c).Value
+                ws.Cells(r, c).Value = department_ranks(department)("rank")
+            End If
         Next c
     Next r
-End Function
+    
+    ws.Range(ws.Cells(3, 3), ws.Cells(max_row, max_column)).VerticalAlignment = xlCenter
+    ws.Range(ws.Cells(3, 3), ws.Cells(max_row, max_column)).HorizontalAlignment = xlCenter
 
+End Function
 
 Private Sub test_write_summary_table()
     argument_init

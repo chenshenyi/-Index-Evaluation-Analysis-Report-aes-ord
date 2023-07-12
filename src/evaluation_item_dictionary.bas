@@ -1,4 +1,5 @@
 Attribute VB_Name = "evaluation_item_dictionary"
+' 2023-07-11 17:15:16
 
 ' Passed all test
 
@@ -10,6 +11,7 @@ Attribute VB_Name = "evaluation_item_dictionary"
 '       format: "整數數值" | "數值" | "百分比"
 '       sortBy: "遞增" | "遞減"
 '       summarize: "均值" | "加總" 
+'       group: Integer
 
 ' The data is stored in the worksheet "評鑑指標" in "B 參數.xlsx"
 '   First row is the header
@@ -18,6 +20,7 @@ Attribute VB_Name = "evaluation_item_dictionary"
 '   Column C: Evaluation item format
 '   Column D: Evaluation item sortBy
 '   Column E: Evaluation item summarize
+'   Column F: Evaluation item group
 
 Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Dictionary
     Dim evaluation_item_dict As Scripting.Dictionary
@@ -34,19 +37,16 @@ Function evaluation_item_dict_init(argument_wb As Workbook) As Scripting.Diction
     last_row = ws.Cells(Rows.Count, 1).End(xlUp).Row
     
     For i = 2 To last_row
-        evaluation_item_id = ws.Cells(i, 1).Value
-        evaluation_item_name = ws.Cells(i, 2).Value
-        evaluation_item_format = ws.Cells(i, 3).Value
-        evaluation_item_sortBy = ws.Cells(i, 4).Value
-        evaluation_item_summarize = ws.Cells(i, 5).Value
-        
+     
         Set evaluation_item = New Scripting.Dictionary
-        evaluation_item.Add "id", evaluation_item_id
-        evaluation_item.Add "format", evaluation_item_format
-        evaluation_item.Add "sortBy", evaluation_item_sortBy
-        evaluation_item.Add "summarize", evaluation_item_summarize
+        evaluation_item.Add "id", ws.Cells(i, 1).Text
+        evaluation_item.Add "name", ws.Cells(i, 2).Text
+        evaluation_item.Add "format", ws.Cells(i, 3).Text
+        evaluation_item.Add "sortBy", ws.Cells(i, 4).Text
+        evaluation_item.Add "summarize", ws.Cells(i, 5).Text
+        evaluation_item.Add "group", ws.Cells(i, 6).Text
         
-        evaluation_item_dict.Add evaluation_item_name, evaluation_item
+        evaluation_item_dict.Add evaluation_item("name"), evaluation_item
     Next i
     
     Set evaluation_item_dict_init = evaluation_item_dict

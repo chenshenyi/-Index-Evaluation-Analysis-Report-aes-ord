@@ -1,5 +1,5 @@
 Attribute VB_Name = "content_control"
-
+' 2023-07-11 17:15:02
 
 Function create_content_control_by_place_hold(wdDoc As Object, ByVal placehold As String)
 

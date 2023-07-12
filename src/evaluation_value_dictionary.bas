@@ -1,4 +1,5 @@
 Attribute VB_Name = "evaluation_value_dictionary"
+' 2023-07-11 17:14:41
 
 ' Passed All Test
 
@@ -213,9 +214,9 @@ Function reformulate_value(ByVal value As String, ByVal summarize As String) As 
                 value = Split(value, " /")(1)
         End Select
     End If
-
+    
     If value = "-1" or value = "" Then
-        value = "-"
+        value = "—"
     End If
 
     ' 將百分比轉換為小數
@@ -224,8 +225,9 @@ Function reformulate_value(ByVal value As String, ByVal summarize As String) As 
     End If
 
     reformulate_value = value
+    Exit Function
 ErrorHandler:
-    reformulate_value = "-"
+    reformulate_value = "—"
     Resume Next
 End Function
 
@@ -273,13 +275,15 @@ End Sub
 '   college_name: the name of the college with college id(eg. '100 文學院')
 '   sortBy: '遞增' or '遞減'
 Function college_rank_eq(evaluation_value_dict As Scripting.Dictionary, ByVal college_name As String, ByVal sortBy As String)
+    On Error GoTo ErrorHandler
+
     Dim department_avg_list As Collection
     Set department_avg_list = New Collection
 
     For Each department_name In evaluation_value_dict(college_name)
-        ' 如果 department_name 前三碼和 college_name 前三碼相同 或是 avg 是 "-" 就不加入
+        ' 如果 department_name 前三碼和 college_name 前三碼相同 或是 avg 是 "—" 就不加入
         avg = evaluation_value_dict(college_name)(department_name)("avg")
-        If Left(department_name, 3) <> Left(college_name, 3) And avg<>"-" Then
+        If Left(department_name, 3) <> Left(college_name, 3) And avg<>"—" Then
             department_avg_list.Add avg
         End if
     Next department_name
@@ -291,13 +295,18 @@ Function college_rank_eq(evaluation_value_dict As Scripting.Dictionary, ByVal co
 
         If Left(department_name, 3) = Left(college_name, 3) Then
             department_dict.Add "rank", 999
-        ElseIf avg = "-" Then
-           department_dict.Add "rank", "-"
+        ElseIf avg = "—" Then
+           department_dict.Add "rank", "—"
         Else
             rank = rank_eq(department_avg_list, avg, sortBy)
             department_dict.Add "rank", rank
         End if
     Next department_name
+
+    Exit Function
+    
+ErrorHandler:
+    MsgBox "Error: " & "college_rank_eq" & vbCrLf & "college_name: " & college_name
 End Function
 
 ' Passed test
@@ -338,6 +347,9 @@ End Sub
 '   v: value to be ranked
 '   sortBy: "遞增" or "遞減"
 Function rank_eq(value_list As Collection, ByVal v As Double, ByVal sortBy As String) As Integer
+    On Error GoTo ErrorHandler
+    
+
     Dim i As Integer
     Dim rank As Integer
     Dim list_length As Integer
@@ -359,6 +371,12 @@ Function rank_eq(value_list As Collection, ByVal v As Double, ByVal sortBy As St
         End If
     Next i
     rank_eq = rank +1
+    Exit Function
+ErrorHandler:
+    MsgBox "Error in rank_eq: " & vbCrLf & _
+            "Can't rank " & v & " in " & json_str(value_list) & vbCrLf
+
+    rank_eq = 0
 End Function
 
 ' Passed test
@@ -377,3 +395,4 @@ Private Sub test_rank_eq()
     Debug.Print rank_eq(sorted_list, 4, "遞減")
     Debug.Print rank_eq(sorted_list, 5, "遞減")
 End Sub
+
