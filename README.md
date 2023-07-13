@@ -2,8 +2,8 @@
 
 ## 版本資訊
 
-- Version: 0.0.1
-- Last Update: 2023.06.30
+- Version: 1.0.0
+- Last Update: 2023.07.13
 
 ## 檔案下載
 
