@@ -107,5 +107,9 @@
         }
 
     ],
+    "markdown-mermaid.languages": [
+    
+        "mermaid"
+    ],
     
 }

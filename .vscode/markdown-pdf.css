@@ -1,0 +1,45 @@
+* {
+    font-family: 'Times New Roman', 標楷體, Arial, sans-serif;
+}
+
+h1 {
+    font-size: 40pt;
+    text-align: center;
+    font-weight:bold;
+    margin-top: 60%;
+    page-break-after: always;
+    border: 0px;
+}
+
+h2 {
+    page-break-before: always;
+    page-break-after: never;
+    font-size: 18pt;
+    text-align: center;
+    font-weight:bold;
+}
+
+h3 {
+    page-break-before: always;
+    page-break-after: never;
+    font-size: 16pt;
+    text-align: left;
+    font-weight:bold;
+}
+
+h4 {
+    page-break-before: always;
+    page-break-after: never;
+    font-size: 14pt;
+    text-align: left;
+    font-weight:bold;
+}
+
+h5 {
+    page-break-before: always;
+    page-break-after: never;
+    font-size: 12pt;
+    text-align: left;
+    font-weight: bold;
+}
+
