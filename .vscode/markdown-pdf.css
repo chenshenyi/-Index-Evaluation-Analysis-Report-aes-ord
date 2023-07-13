@@ -20,7 +20,7 @@ h2 {
 }
 
 h3 {
-    page-break-before: always;
+    page-break-before: auto;
     page-break-after: never;
     font-size: 16pt;
     text-align: left;
@@ -28,7 +28,7 @@ h3 {
 }
 
 h4 {
-    page-break-before: always;
+    page-break-before: auto;
     page-break-after: never;
     font-size: 14pt;
     text-align: left;
@@ -36,7 +36,7 @@ h4 {
 }
 
 h5 {
-    page-break-before: always;
+    page-break-before: auto;
     page-break-after: never;
     font-size: 12pt;
     text-align: left;
