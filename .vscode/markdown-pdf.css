@@ -43,3 +43,8 @@ h5 {
     font-weight: bold;
 }
 
+th {
+    font-size: 12pt;
+    text-align: center;
+    font-weight: bold;
+}
