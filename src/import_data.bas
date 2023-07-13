@@ -324,7 +324,7 @@ Function generate_analytic_text(ws As worksheet, ByVal college As String, ByVal 
     sortBy = evaluation_item_dict(evauation_item)("sortBy")
     summarize = evaluation_item_dict(evauation_item)("summarize")
 
-    Set result_range = ws.Range("Q1")
+    Set result_range = ws.Range("I1")
 
     If college = "政治大學" Then
         level = "校"
