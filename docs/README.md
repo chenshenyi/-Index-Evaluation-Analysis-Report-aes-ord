@@ -2,7 +2,7 @@
 
 ## 環境建置
 
-為了方便開發，建議以 [Visual Studio Code](https://code.visualstudio.com/) 為開發環境，並根據 `.vscode` 資料夾中的設定檔 `.vscode/extensions.json` 安裝相關 Extension （或者可以直接在 VS Code 中搜尋 `@recommended`）。
+為了方便開發，建議以 [Visual Studio Code](https://code.visualstudio.com/) 為開發環境，並根據 `.vscode` 資料夾中的設定檔 [.vscode/extensions.json](../.vscode/extensions.json) 安裝相關 Extension （或者可以直接在 VS Code 中搜尋 `@recommended`）。
 
 程式碼中有中文，請統一使用 Big5-HKSCS 編碼，否則匯入 Excel 時會出現亂碼。
 
@@ -18,15 +18,19 @@
 
 ## 程式執行
 
-所有內容都需先匯入 `test/A. 主程式.xlsm` 中進行測試，詳細說明請參考 `test/README.md`。
+所有內容都需先匯入 [test/A. 主程式.xlsm](../test/A. 主程式.xlsm) 進行測試。
 
 ## 資料夾結構
 
 Index-Evaluation-Analysis-Report
 
 - docs
+  - *說明文件寫在此處*
+- example（示範給不會寫程式的人看）
+- screenshot
 - src
   - *專案程式碼寫在此處*
+- template（供不會寫程式的人開啟新專案使用，請保持其子資料夾淨空，但保留一個隱藏檔案供 `git` 保留資料夾）
 - test
   - 0 原始資料
   - 1 各院彙整資料
@@ -36,26 +40,23 @@ Index-Evaluation-Analysis-Report
   - output
   - A主程式.xlsm
   - B參數.xlsx
-- 指標報告書自動化範例檔案（示範給不會寫程式的人看）
-- 新專案（供不會寫程式的人開啟新專案使用，請保持其子資料夾淨空，但保留一個隱藏檔案供 `git` 保留資料夾）
 
 ## 發布前 Checklist
 
-- `git` commit 並 push
-- 確認 `test/` 中的測試資料是否正確
+- `git commit` 並 `push`
+- 更新 [/test/A 主程式.xlsm](../test/A. 主程式.xlsm) 中的程式碼
+  - 更新至 [template/](../template/) 資料夾中(記得將一鍵更新程式碼的按鈕刪除)
+  - 更新至 [example/](../example/) 資料夾中(記得將一鍵更新程式碼的按鈕刪除)
 - 更新說明文件
-  - `docs/`
-  - `test/README.md`
-  - `src/README.md`
-  - `README.md`
-  - `指標報告書自動化範例檔案/操作指引.docx`
-  - `新專案/操作指引.docx`
+  - 更新 [README.md](../README.md)
+  - 更新 [docs/README.md](../docs/README.md)
+  - 更新 [docs/自動化程式說明書.md](../docs/自動化程式說明書.md)
+    - 匯出 [docs/自動化程式說明書.pdf](../docs/自動化程式說明書.pdf)
+    - 更新 [template/自動化程式說明書.pdf](../template/自動化程式說明書.pdf)
+    - 更新 [example/自動化程式說明書.pdf](../example/自動化程式說明書.pdf)
+  - 更新 [docs/](../docs/) 資料夾中其他說明文件
+  
 - 更新版本號
-- 將 `A 主程式` 更新到 `指標報告書自動化範例檔案` 與 `新專案`
-
-## 函數說明
-
-詳見 `docs/` 資料夾。
 
 ## 常見問題
 
@@ -82,8 +83,4 @@ Index-Evaluation-Analysis-Report
 
 ## 匯入模組(module)
 
-所有程式碼都寫在 `A. 主程式.xlsm` 中，因為 `VBA` 是一種古老的語言，所以匯入模組的方式也很古老，有一個方便的小程序可以幫助我們匯入模組，請參考 [import_modules.bas](../src/import_modules.bas)。
-
-## 發布正式版
-
-將資料夾中 `A. 主程式.xlsm` 分別複製到 `指標報告書自動化範例檔案` 與 `新專案` 中即可。
+所有程式碼都寫在 [A. 主程式.xlsm](../test/A%20主程式.xlsm) 中，因為 `VBA` 是一種古老的語言，所以匯入模組的方式也很古老，有一個方便的小程序可以幫助我們匯入模組，請參考 [import_modules.bas](../src/import_modules.bas)。
