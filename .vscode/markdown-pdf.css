@@ -13,7 +13,7 @@ h1 {
 
 h2 {
     page-break-before: always;
-    page-break-after: never;
+    page-break-after: avoid;
     font-size: 18pt;
     text-align: center;
     font-weight:bold;
@@ -21,7 +21,7 @@ h2 {
 
 h3 {
     page-break-before: auto;
-    page-break-after: never;
+    page-break-after: avoid;
     font-size: 16pt;
     text-align: left;
     font-weight:bold;
@@ -29,7 +29,7 @@ h3 {
 
 h4 {
     page-break-before: auto;
-    page-break-after: never;
+    page-break-after: avoid;
     font-size: 14pt;
     text-align: left;
     font-weight:bold;
@@ -37,14 +37,12 @@ h4 {
 
 h5 {
     page-break-before: auto;
-    page-break-after: never;
+    page-break-after: avoid;
     font-size: 12pt;
     text-align: left;
     font-weight: bold;
 }
 
-th {
-    font-size: 12pt;
-    text-align: center;
-    font-weight: bold;
+table {
+    page-break-inside: avoid;
 }
