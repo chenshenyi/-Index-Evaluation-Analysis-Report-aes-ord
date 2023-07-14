@@ -7,7 +7,7 @@ h1 {
     text-align: center;
     font-weight:bold;
     margin-top: 60%;
-    page-break-after: always;
+    page-break-after: left;
     border: 0px;
 }
 
