@@ -30,3 +30,42 @@ Sub importModules()
     Next file
 End Sub
 
+Function getFileFromGit(ByVal modulefile As String)
+    Dim response As String
+
+    github_path = "https://raw.githubusercontent.com/chenshenyi/Index-Evaluation-Analysis-Report/main/src/"
+    address = github_path & modulefile
+
+    With CreateObject("MSXML2.XMLHTTP")
+        .Open "GET", address, False
+        .setRequestHeader "pragma", "no-cache"
+        .setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+        .setRequestHeader "cache-control", "no-store, must-revalidate, private" 
+        .send
+        response = BinToStr(.responseBody, "big5")
+    End With
+
+    If Trim(response) = "" Then
+        Exit Function
+    End If
+
+    Open ThisWorkbook.Path & "\.src\" & modulefile For Output As #1
+    Print #1, response
+    Close #1
+End Function
+
+Function BinToStr(arrBin, strChrs)
+    With CreateObject("ADODB.Stream")
+        .Type = 2
+        .Open
+        .Writetext arrBin
+        .Position = 0
+        .Charset = strChrs
+        BinToStr = .ReadText
+        .Close
+    End With
+End Function
+
+Sub updateModules()
+    Call getFileFromGit("import_modules.bas")
+End Sub 
