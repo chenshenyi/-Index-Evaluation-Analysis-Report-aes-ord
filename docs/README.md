@@ -44,19 +44,18 @@ Index-Evaluation-Analysis-Report
 ## 發布前 Checklist
 
 - `git commit` 並 `push`
-- 更新 [/test/A 主程式.xlsm](../test/A. 主程式.xlsm) 中的程式碼
-  - 更新至 [template/](../template/) 資料夾中(記得將一鍵更新程式碼的按鈕刪除)
-  - 更新至 [example/](../example/) 資料夾中(記得將一鍵更新程式碼的按鈕刪除)
 - 更新說明文件
   - 更新 [README.md](../README.md)
   - 更新 [docs/README.md](../docs/README.md)
   - 更新 [docs/自動化程式說明書.md](../docs/自動化程式說明書.md)
-    - 匯出 [docs/自動化程式說明書.pdf](../docs/自動化程式說明書.pdf)
-    - 更新 [template/自動化程式說明書.pdf](../template/自動化程式說明書.pdf)
-    - 更新 [example/自動化程式說明書.pdf](../example/自動化程式說明書.pdf)
+    - 請匯出成 pdf 檔案
+    Ctrl+Shift+P > Markdown Export: Export (pdf)
   - 更新 [docs/](../docs/) 資料夾中其他說明文件
-  
-- 更新版本號
+- 更新 [CHANGELOG.md](../CHANGELOG.md)
+- 更新 [src/index.json](../src/index.json)
+- 打開 [test/A 主程式.xlsm](../test/A%20主程式.xlsm)
+  - 找到 `import_modules` 模組，執行 `upgrade` 程序，確認所有模組都已匯入
+  - 找到 `import_modules` 模組，執行 `build` 程序，將主程序與說明文件匯出到 [template](../template) 資料夾與 [example](../example) 資料夾
 
 ## 常見問題
 
