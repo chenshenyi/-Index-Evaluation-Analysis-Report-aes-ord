@@ -17,6 +17,24 @@ Private Sub importSelf()
     
 End Sub
 
+Private Sub Builder()
+    from_path = ThisWorkbook.path & "\A 主程式.xlsm"
+    to_path = ThisWorkbook.path & "\..\template\A 主程式.xlsm"
+    copy_file from_path, to_path
+
+    from_path = ThisWorkbook.path & "\A 主程式.xlsm"
+    to_path = ThisWorkbook.path & "\..\example\A 主程式.xlsm"
+    copy_file from_path, to_path
+
+    from_path = ThisWorkbook.path & "\..\docs\自動化程式說明書.pdf"
+    to_path = ThisWorkbook.path & "\..\template\自動化程式說明書.pdf"
+    copy_file from_path, to_path
+
+    from_path = ThisWorkbook.path & "\..\docs\自動化程式說明書.pdf"
+    to_path = ThisWorkbook.path & "\..\example\自動化程式說明書.pdf"
+    copy_file from_path, to_path
+End Sub
+
 Sub importModules()
     CODE_FOLDER = ThisWorkbook.path & "\.src\"
 
