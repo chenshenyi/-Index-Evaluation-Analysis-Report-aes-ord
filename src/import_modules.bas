@@ -1,3 +1,4 @@
+
 Attribute VB_Name = "import_modules"
 ' 2023-07-12 14:21:38
 
@@ -43,6 +44,7 @@ Function getFileFromGit(ByVal modulefile As String)
         .setRequestHeader "cache-control", "no-store, must-revalidate, private" 
         .send
         response = BinToStr(.responseBody, "big5")
+        
     End With
 
     If Trim(response) = "" Then
@@ -50,7 +52,7 @@ Function getFileFromGit(ByVal modulefile As String)
     End If
 
     Open ThisWorkbook.Path & "\.src\" & modulefile For Output As #1
-    Print #1, response
+    Print #1, right(response, len(response) - 2)
     Close #1
 End Function
 
@@ -67,5 +69,5 @@ Function BinToStr(arrBin, strChrs)
 End Function
 
 Sub updateModules()
-    Call getFileFromGit("import_modules.bas")
+    Call getFileFromGit("index.json")
 End Sub 
