@@ -23,7 +23,7 @@ Private Sub Builder()
     copy_file from_path, to_path
 
     from_path = ThisWorkbook.path & "\A 主程式.xlsm"
-    to_path = ThisWorkbook.path & "\..\example\A 主程式.xlsm"
+    to_path = ThisWorkbook.path & "\..\example\A%20主程式.xlsm"
     copy_file from_path, to_path
 
     from_path = ThisWorkbook.path & "\..\docs\自動化程式說明書.pdf"
@@ -119,6 +119,10 @@ Function readIndex()
 End Function
 
 Sub upgrade()
+    ' test if .src folder exists, if not, create it
+    If Dir(ThisWorkbook.path & "\.src", vbDirectory) = "" Then
+        MkDir ThisWorkbook.path & "\.src"
+    End If
     For Each modulefile In readIndex
         getFileFromGit modulefile
     Next modulefile
