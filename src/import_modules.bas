@@ -120,6 +120,7 @@ End Function
 
 Sub upgrade()
     ' test if .src folder exists, if not, create it
+    
     If Dir(ThisWorkbook.path & "\.src", vbDirectory) = "" Then
         MkDir ThisWorkbook.path & "\.src"
     End If
@@ -127,4 +128,10 @@ Sub upgrade()
         getFileFromGit modulefile
     Next modulefile
     importModules
+
+    ' delete .src folder
+    On Error Resume Next
+    Kill ThisWorkbook.path & "\.src\*.*"
+    RmDir ThisWorkbook.path & "\.src"
+    On Error GoTo 0
 End Sub
