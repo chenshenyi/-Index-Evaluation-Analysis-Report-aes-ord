@@ -2,13 +2,55 @@
 Attribute VB_Name = "import_modules"
 ' 2023-07-17 11:01:40
 
+' ================================================ Dev ================================================
+
+Private Sub importSelfDev()
+    CODE_FOLDER = ThisWorkbook.path & "\..\src\"
+    Dim project As VBIDE.VBProject
+    Set project = ThisWorkbook.VBProject
+    For Each component In project.VBComponents
+        If component.name = "import_modules" Then
+            component.name = "toRemove"
+            project.VBComponents.Import CODE_FOLDER & "import_modules.bas"
+            project.VBComponents.Remove component
+            Exit Sub
+        End If
+    Next component
+End Sub
+
+Private Sub importModulesDev()
+    CODE_FOLDER = ThisWorkbook.path & "\..\src\"
+
+    Dim project As VBIDE.VBProject
+    Set project = ThisWorkbook.VBProject
+
+    Dim component As VBIDE.VBComponent
+    For Each component In project.VBComponents
+        If component.name <> "import_modules" And _
+        component.Type = vbext_ct_StdModule Then
+            project.VBComponents.Remove component
+        End If
+    Next component
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    Set folder = fso.GetFolder(CODE_FOLDER)
+
+    For Each file In folder.files
+        If right(file.name, 4) = ".bas" Then
+            If file.name <> "import_modules.bas" Then
+                project.VBComponents.Import file.path
+            End If
+        End If
+    Next file
+End Sub
+
 Private Sub updateFiles()
     from_path = ThisWorkbook.path & "\A 主程式.xlsm"
     to_path = ThisWorkbook.path & "\..\template\A 主程式.xlsm"
     copy_file from_path, to_path
 
     from_path = ThisWorkbook.path & "\A 主程式.xlsm"
-    to_path = ThisWorkbook.path & "\..\example\A%20主程式.xlsm"
+    to_path = ThisWorkbook.path & "\..\example\A 主程式.xlsm"
     copy_file from_path, to_path
 
     from_path = ThisWorkbook.path & "\..\docs\自動化程式說明書.pdf"
@@ -19,6 +61,14 @@ Private Sub updateFiles()
     to_path = ThisWorkbook.path & "\..\example\自動化程式說明書.pdf"
     copy_file from_path, to_path
 End Sub
+
+Private Sub updateAll()
+    importSelfDev
+    importModulesDev
+    updateFiles
+End Sub
+
+' ================================================ Publish ================================================
 
 Function getFileFromGit(ByVal modulefile As String)
     Dim response As String
