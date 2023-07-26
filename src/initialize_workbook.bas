@@ -23,7 +23,7 @@ Sub initialize_all_workbooks()
     ThisWorkbook.worksheets("template").Range("D1").Value = year & "¦~"
     ThisWorkbook.worksheets("template").Range("E1").Value = year-1 & "¦~"
     ThisWorkbook.worksheets("template").Range("F1").Value = year-2 & "¦~"
-
+    ThisWorkbook.worksheets("template").Visible = True
     
     ' Create the workbooks by college names
     create_workbooks_by_college_names college_department_dict.Keys
@@ -52,6 +52,7 @@ Sub initialize_all_workbooks()
         wb.Close
     Next college
 
+    ThisWorkbook.worksheets("template").Visible = False
     Application.DisplayAlerts = True
     Application.ScreenUpdating = True
 End Sub
